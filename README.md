@@ -26,15 +26,15 @@ npm run lint
 ```
 
 ### Package to an uploadable zip
-Update the manifest.json file to include the public url of your Tab file
-file is stored at [public/manifest.json](public/manifest.json)
-after adjusting the manifest.json file run:
-follow the instructions on how to deploy your app:
-https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/deploy-and-publish/apps-upload
-
+Update the manifest.json file to include the public url of your Tab file  
+file is stored at [public/manifest.json](public/manifest.json)  
+after adjusting the manifest.json file run:  
 ```
 npm run package
 ```
+
+follow the instructions on how to deploy your app:  
+https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/deploy-and-publish/apps-upload
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
