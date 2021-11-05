@@ -1,17 +1,41 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <b-alert
+    v-model="show"
+    class="mt-3"
+    dismissible
+    @dismissed="dismissed"
+  >
+    Hello {{ name }}!
+  </b-alert>
+</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+  },
+  data() {
+    return {
+      name: 'BootstrapVue',
+      show: true
+    }
+  },
+  watch: {
+    show(newVal) {
+      console.log('Alert is now ' + (newVal ? 'visible' : 'hidden'))
+    }
+  },
+  methods: {
+    toggle() {
+      console.log('Toggle button clicked')
+      this.show = !this.show
+    },
+    dismissed() {
+      console.log('Alert dismissed')
+    }
   }
 }
 </script>
