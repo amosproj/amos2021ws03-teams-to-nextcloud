@@ -26,7 +26,7 @@ npm run lint
 ```
 
 ### Package to an uploadable zip
-Update the manifest.json file to include the public url of your Tab file  
+Update the `manifest.json` file to include the public url of your Tab file (inside the `staticTabs` the property `contentUrl`)  
 file is stored at [public/manifest.json](public/manifest.json)  
 after adjusting the manifest.json file run:  
 ```
