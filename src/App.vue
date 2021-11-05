@@ -1,14 +1,17 @@
 <template>
-  <div id="app">
-  <b-alert
-    v-model="show"
-    class="mt-3"
-    dismissible
-    @dismissed="dismissed"
-  >
-    Hello {{ name }}!
-  </b-alert>
-</div>
+    <div id="app">
+        <b-button size="sm" @click="toggle">
+            {{ show ? 'Hide' : 'Show' }} Alert
+        </b-button>
+        <b-alert
+        v-model="show"
+        class="mt-3"
+        dismissible
+        @dismissed="dismissed"
+        >
+            Hello {{ name }}!
+      </b-alert>
+    </div>
 </template>
 
 <script>
@@ -17,7 +20,7 @@ export default {
   name: 'App',
   components: {
   },
-  data() {
+    data() {
     return {
       name: 'BootstrapVue',
       show: true
