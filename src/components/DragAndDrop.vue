@@ -16,8 +16,18 @@
 <script>
     export default {
         name: 'DragAndDrop',
-        data: () => ({ File: []})
+        data: () => ({ File: []}),
+    methods: {
+      uploadFile(e) {
+        this.File = e.target.files;
+      },
+      dragFile(e) {
+        this.File = e.dataTransfer.files;
+      }
+  }
 
     }
 
 </script>
+
+
