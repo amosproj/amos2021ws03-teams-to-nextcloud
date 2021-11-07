@@ -11,14 +11,22 @@
         >
             Hello {{ name }}!
       </b-alert>
+
+
+      <DragAndDrop/>
     </div>
+
+    
 </template>
 
 <script>
+import DragAndDrop from './components/DragAndDrop.vue'
 
 export default {
   name: 'App',
   components: {
+    DragAndDrop,
+
   },
     data() {
     return {
