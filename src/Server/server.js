@@ -2,13 +2,14 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const { createClient } = require("webdav");
 
-// const { createAdapter } = require("webdav-fs");
-
 const fs = require('fs');
 const app = express();
 const port = 8000
 
-
+const client = createClient("https://tubcloud.tu-berlin.de/remote.php/dav/files/[...]/", {
+    username: "",
+    password: ""
+});
 
 
 
@@ -24,6 +25,12 @@ app.post('/upload', function(req, res) {
 
 
 
+     fs
+    .createReadStream(req.files.sampleFile.tempFilePath)
+    .pipe(client.createWriteStream(req.files.sampleFile.name));
+
+
+    console.log("finished")
 
     
 
