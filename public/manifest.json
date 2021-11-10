@@ -1,41 +1,45 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.10/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.10",
-  "version": "1.0.0",
-  "id": "aed5da06-7c88-4ec2-ac8b-d9622b5a5b99",
-  "developer": {
-    "name": "AMOS Project 2021 Group 3",
-    "websiteUrl": "https://github.com/amosproj/amos2021ws03-teams-to-nextcloud",
-    "privacyUrl": "https://github.com/amosproj/amos2021ws03-teams-to-nextcloud",
-    "termsOfUseUrl": "https://github.com/amosproj/amos2021ws03-teams-to-nextcloud"
-  },
-  "name": {
-    "short": "Nextcloud"
-  },
-  "description": {
-    "short": "Short description of your app (<= 80 chars)",
-    "full": "Full description of your app (<= 4000 chars)"
-  },
-  "icons": {
-    "outline": "icons/icon32.png",
-    "color": "icons/icon192.png"
-  },
-  "accentColor": "#cacaca",
-  "staticTabs": [
-    {
-      "entityId": "amos.teams.to.nextcloud",
-      "scopes": [
-        "personal"
-      ],
-      "context":[
-        "personalTab",
-        "channelTab"
-        ],
-      "name": "Nextcloud",
-      "contentUrl": "https://your-ngrok-url.nrgok.io"
-    }
-  ],
-  "permissions": [
-      "identity"
-  ]
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.11/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.11",
+    "version": "1.0.0",
+    "id": "75a6a510-c8ee-4d99-b78e-f845023502f8",
+    "packageName": "org.amos.teams.to.nextcloud",
+    "developer": {
+        "name": "AMOS Project Group 3",
+        "websiteUrl": "https://github.com/amosproj/amos2021ws03-teams-to-nextcloud",
+        "privacyUrl": "https://github.com/amosproj/amos2021ws03-teams-to-nextcloud",
+        "termsOfUseUrl": "https://github.com/amosproj/amos2021ws03-teams-to-nextcloud"
+    },
+    "icons": {
+        "color": "color.png",
+        "outline": "outline.png"
+    },
+    "name": {
+        "short": "Nextcloud",
+        "full": "Nextcloud Integration"
+    },
+    "description": {
+        "short": "Tab App for uploading and managing files via Nextcloud",
+        "full": "This App integrates Nextcloud into Teams by giving a frontend to interact with Nextcloud for managing, sharing and creating files within Teams Channels"
+    },
+    "accentColor": "#8A038A",
+    "configurableTabs": [
+        {
+            "configurationUrl": "https://some.ngrok.url",
+            "canUpdateConfiguration": true,
+            "scopes": [
+                "team"
+            ],
+            "context": [
+                "channelTab"
+            ]
+        }
+    ],
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
+    "validDomains": [
+        "some.ngrok.url"
+    ]
 }
