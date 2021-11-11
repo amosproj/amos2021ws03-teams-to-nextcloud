@@ -1,10 +1,14 @@
 <template>
-<div :context="context">
-    <p>{{teamName}}</p>
-    <p>{{channelName}}</p>
-    <p>{{userName}}</p>
-    <p>{{channelID}}</p>
-</div>
+<b-card 
+    :context="context"
+    :title="userName"
+>
+    <b-card-text>
+        <p>{{teamName}}</p>
+        <p>{{channelName}}</p>
+        <p>{{channelID}}</p>
+    </b-card-text>
+</b-card>
 </template>
 <script>
 export default {
