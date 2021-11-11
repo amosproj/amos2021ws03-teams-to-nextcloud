@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "webdav": "^4.7.0",
     "webdav-fs": "^4.0.0"
