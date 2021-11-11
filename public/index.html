@@ -15,7 +15,6 @@
     <div id="app">
 
     </div>
-
           <form ref='uploadForm' 
             id='uploadForm' 
             action='http://localhost:8000/upload' 
@@ -24,13 +23,6 @@
               <input type="file" name="sampleFile" />
               <input type='submit' value='Upload!' />
           </form>     
-          <br>
-          <br>
-          <p id="teamName">Team-Name:</p>
-          <p id="channelName">Channel-Name: </p>
-          <p id="userName">User-Principle-Name: </p>
-          <p id="channelID">Channel ID: </p>
-
     </div>
 
 
@@ -39,15 +31,4 @@
     </div>
     <!-- built files will be auto injected -->
   </body>
-
-  <script>
-      microsoftTeams.initialize();
-      microsoftTeams.getContext(function(teamsContext){
-        document.getElementById("teamName").innerHTML += teamsContext.teamName;
-        document.getElementById("channelName").innerHTML += teamsContext.channelName;
-        document.getElementById("userName").innerHTML += teamsContext.userPrincipalName;
-        document.getElementById("channelID").innerHTML += teamsContext.channelId;
-      })
-    </script>
-
 </html>

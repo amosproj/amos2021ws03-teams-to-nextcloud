@@ -11,21 +11,25 @@
         >
             Hello {{ name }}!
       </b-alert>
-
+      <TeamsInfo :context="context"/>
     </div>
-
-    
 </template>
 
 <script>
-import * as microsoftTeams from '@microsoft/teams-js'
+import * as microsoftTeams from '@microsoft/teams-js';
+import TeamsInfo from './components/TeamsInfo.vue';
 export default {
   name: 'App',
+    components: {
+        TeamsInfo 
+    },
     data() {
-    return {
-      name: 'BootstrapVue',
-      show: true
-    }
+        return {
+          name: 'BootstrapVue',
+          show: true,
+          context: null,
+          contextLoaded: false,
+        }
   },
   watch: {
     show(newVal) {
@@ -56,6 +60,10 @@ export default {
         });
         saveEvent.notifySuccess();
     });
+    microsoftTeams.getContext((context)=>{
+        this.context = context;
+        this.contextLoaded = true;
+    })
     microsoftTeams.settings.setValidityState(true);
   }
 }
