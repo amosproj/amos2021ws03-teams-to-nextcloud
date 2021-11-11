@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <script src="https://statics.teams.microsoft.com/sdk/v1.5.2/js/MicrosoftTeams.min.js" crossorigin="anonymous"></script>
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
@@ -23,6 +24,12 @@
               <input type="file" name="sampleFile" />
               <input type='submit' value='Upload!' />
           </form>     
+          <br>
+          <br>
+          <p id="teamName">Team-Name:</p>
+          <p id="channelName">Channel-Name: </p>
+          <p id="userName">User-Principle-Name: </p>
+          <p id="channelID">Channel ID: </p>
 
     </div>
 
@@ -32,4 +39,15 @@
     </div>
     <!-- built files will be auto injected -->
   </body>
+
+  <script>
+      microsoftTeams.initialize();
+      microsoftTeams.getContext(function(teamsContext){
+        document.getElementById("teamName").innerHTML += teamsContext.teamName;
+        document.getElementById("channelName").innerHTML += teamsContext.channelName;
+        document.getElementById("userName").innerHTML += teamsContext.userPrincipalName;
+        document.getElementById("channelID").innerHTML += teamsContext.channelId;
+      })
+    </script>
+
 </html>
