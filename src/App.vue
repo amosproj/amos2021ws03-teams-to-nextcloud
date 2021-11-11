@@ -1,27 +1,18 @@
 <template>
-    <div id="app">
-        <b-button size="sm" @click="toggle">
-            {{ show ? 'Hide' : 'Show' }} Alert
-        </b-button>
-        <b-alert
-        v-model="show"
-        class="mt-3"
-        dismissible
-        @dismissed="dismissed"
-        >
-            Hello {{ name }}!
-      </b-alert>
+    <b-container>
       <TeamsInfo :context="context"/>
-    </div>
+      <FileUpload/>
+    </b-container>
 </template>
 
 <script>
 import * as microsoftTeams from '@microsoft/teams-js';
 import TeamsInfo from './components/TeamsInfo.vue';
+import FileUpload from './components/FileUpload.vue'
 export default {
   name: 'App',
     components: {
-        TeamsInfo 
+        TeamsInfo, FileUpload 
     },
     data() {
         return {
@@ -30,20 +21,6 @@ export default {
           context: null,
           contextLoaded: false,
         }
-  },
-  watch: {
-    show(newVal) {
-      console.log('Alert is now ' + (newVal ? 'visible' : 'hidden'))
-    }
-  },
-  methods: {
-    toggle() {
-      console.log('Toggle button clicked')
-      this.show = !this.show
-    },
-    dismissed() {
-      console.log('Alert dismissed')
-    }
   },
   mounted: function() {
     /*
