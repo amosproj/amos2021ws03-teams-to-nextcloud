@@ -1,7 +1,12 @@
 <template>
-    <File/>
-    <p> {{files}} </p>
+<ul>
+    <li v-for="(file,index) in files" :key="index in files">
+        <File :file="file"/>        
+    </li>
+
+</ul>
 </template>
+
 
 
 
@@ -34,9 +39,8 @@ export default {
     },
     methods: {
         async fetchFiles() {
-            const data = await client.getDirectoryContents("/")
-            console.log(data)
-            return data
+            return await client.getDirectoryContents("/")
+
 
         }
     }
