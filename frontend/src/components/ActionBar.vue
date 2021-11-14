@@ -2,7 +2,7 @@
 <div id="actionBar">
     <!-- Place for the other actions... -->
     <span v-if="isAuthenticated" id="listFiles">
-        <a @click="listFiles">List Files</a>
+        <a v-if="!listFilesBoolean" @click="listFiles">List Files</a>
     </span>
 
     <!-- Login/Logout Buttons pushed to the right side-->
@@ -18,6 +18,12 @@
 <script>
 export default {
     name: "ActionBar",
+    data() {
+        return {
+            files: null,
+            listFilesBoolean: false,
+        }
+    },
     computed: {
         isAuthenticated: function () {
             return this.$store.getters.isAuthenticated;
@@ -33,9 +39,10 @@ export default {
         async listFiles() {
             var client = this.$store.getters.StateWebdavClient;
             var username = this.$store.getters.StateUsername;
-            console.log(client);
             const directoryItems = await client.getDirectoryContents("/files/" + username + "/");
-            console.log(directoryItems);
+            this.files = directoryItems
+            console.log(this.files)
+            this.listFilesBoolean = true
         },
     },
     watch: {
