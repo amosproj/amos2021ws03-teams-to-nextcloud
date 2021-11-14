@@ -1,6 +1,9 @@
 <template>
 <div id="actionBar">
     <!-- Place for the other actions... -->
+    <span v-if="isAuthenticated" id="listFiles">
+        <a @click="listFiles">List Files</a>
+    </span>
 
     <!-- Login/Logout Buttons pushed to the right side-->
     <span v-if="isAuthenticated" id="logout">
@@ -26,6 +29,13 @@ export default {
         },
         async logout() {
             await this.$store.dispatch("logout");
+        },
+        async listFiles() {
+            var client = this.$store.getters.StateWebdavClient;
+            var username = this.$store.getters.StateUsername;
+            console.log(client);
+            const directoryItems = await client.getDirectoryContents("/files/" + username + "/");
+            console.log(directoryItems);
         },
     },
     watch: {

@@ -1,8 +1,10 @@
 import axios from 'axios';
+const { createClient } = require("webdav");
 
 const state = {
-    user: null,
-    password: null
+    username: null,
+    password: null,
+    webdavClient: null
 };
 
 const getters = {
@@ -10,7 +12,21 @@ const getters = {
      * Checks if the user is autheticated.
      */
     isAuthenticated: function(state) {
-        return state.user != null;
+        return state.username != null;
+    },
+
+    /**
+     * Returns the username of the currently logged in user.
+     */
+    StateUsername: function(state) {
+        return state.username;
+    },
+
+    /**
+     * Returns a webdav client to the NextCloud instnace.
+     */
+    StateWebdavClient: function(state) {
+        return state.webdavClient;
     }
 };
 
@@ -38,7 +54,7 @@ const actions = {
      * Starts polling the NextCloud endpoint with the token which we got.
      * When the user completes the login in the browser, we commit the setUser() mutation with the username.
      */
-    async pollEndpoint({dispatch, commit}, poll) {
+    async pollEndpoint({dispatch, commit, getters }, poll) {
         const response = await axios.post(poll.endpoint, {token: poll.token}, {validateStatus: false});
         console.log(response);
         // If the response status is 404 -> Poll again after 3 second
@@ -47,7 +63,30 @@ const actions = {
         }
         //-- If the response is 200 -> Save the user data
         if(response.status == 200) {
-            commit("setUser", response.data);
+            // Create a Webdav client
+            await dispatch("initWebdavClient", response.data);
+            // Commit the user once we have the webdav client
+            if(getters.StateWebdavClient != null) {
+                commit("setUser", response.data);
+            }
+            // else login failed ???
+        }
+    },
+
+    /**
+     * Initiates a client connection to the webdav endpoint of the NextClound instance and save this connection in the store.
+     */
+    async initWebdavClient({commit}, data) {
+        try {
+            let username = data.loginName;
+            let password = data.appPassword;
+            const client = createClient("https://tms2nc.de/remote.php/dav", {
+                username: username,
+                password: password
+            });
+            commit("setWebdavClient", client);
+        } catch(e) {
+            console.log(e);
         }
     },
 
@@ -64,15 +103,24 @@ const mutations = {
      * Sets the current user from the response we get at the end of the login flow v2.
      */
     setUser(state, data) {
-        state.user = data.loginName;
+        state.username = data.loginName;
         state.password = data.appPassword;
     },
 
     /**
-     * Clears the current user
+     * Saves the newly created webdav client in the vuex store.
+     */
+    setWebdavClient(state, client) {
+        state.webdavClient = client;
+    },
+
+    /**
+     * Clears the current user data
      */
     logout(state){
-        state.user = null;
+        state.username = null;
+        state.password = null;
+        state.webdavClient = null;
     }
 };
 
