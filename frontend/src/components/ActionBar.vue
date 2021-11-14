@@ -3,6 +3,12 @@
     <!-- Place for the other actions... -->
     <span v-if="isAuthenticated" id="listFiles">
         <a v-if="!listFilesBoolean" @click="listFiles">List Files</a>
+        <ul v-if="listFilesBoolean">
+    <li  v-for="(file,index) in files" :key="index in files">
+        <File :file="file"/>        
+    </li>
+
+</ul>
     </span>
 
     <!-- Login/Logout Buttons pushed to the right side-->
@@ -16,8 +22,14 @@
 </template>
 
 <script>
+
+import File from "./File.vue"
+
 export default {
     name: "ActionBar",
+    components: {
+        File
+    },
     data() {
         return {
             files: null,
@@ -43,6 +55,7 @@ export default {
             this.files = directoryItems
             console.log(this.files)
             this.listFilesBoolean = true
+            
         },
     },
     watch: {

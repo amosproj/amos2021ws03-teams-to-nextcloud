@@ -9,13 +9,11 @@
 <script>
 // @ is an alias to /src
 import ActionBar from "@/components/ActionBar.vue";
-import ShowFiles from "./components/ShowFiles.vue"
 
 export default {
   name: "App",
   components: {
     ActionBar,
-    ShowFiles
   },
 };
 </script>
