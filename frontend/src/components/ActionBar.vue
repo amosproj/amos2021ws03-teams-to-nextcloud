@@ -1,79 +1,60 @@
 <template>
-<div id="actionBar">
+  <div id="actionBar">
     <!-- Place for the other actions... -->
     <span v-if="isAuthenticated" id="listFiles">
-        <a v-if="!listFilesBoolean" @click="listFiles">List Files</a>
-        <ul v-if="listFilesBoolean">
-    <li  v-for="(file,index) in files" :key="index in files">
-        <File :file="file"/>        
-    </li>
-
-</ul>
+      <a @click="listFiles">List Files</a>
     </span>
 
     <!-- Login/Logout Buttons pushed to the right side-->
     <span v-if="isAuthenticated" id="logout">
-        <a @click="logout">Logout</a>
+      <a @click="logout">Logout</a>
     </span>
     <span v-else id="login">
-        <a @click="login">Login</a>
+      <a @click="login">Login</a>
     </span>
-</div>
+  </div>
 </template>
 
 <script>
-
-import File from "./File.vue"
-
 export default {
-    name: "ActionBar",
-    components: {
-        File
+  name: "ActionBar",
+  computed: {
+    isAuthenticated: function () {
+      return this.$store.getters.isAuthenticated;
     },
-    data() {
-        return {
-            files: null,
-            listFilesBoolean: false,
-        }
+  },
+  methods: {
+    async login() {
+      await this.$store.dispatch("initLogin");
     },
-    computed: {
-        isAuthenticated: function () {
-            return this.$store.getters.isAuthenticated;
-        }
+    async logout() {
+      await this.$store.dispatch("logout");
     },
-    methods: {
-        async login() {
-            await this.$store.dispatch("initLogin");
-        },
-        async logout() {
-            await this.$store.dispatch("logout");
-        },
-        async listFiles() {
-            var client = this.$store.getters.StateWebdavClient;
-            var username = this.$store.getters.StateUsername;
-            const directoryItems = await client.getDirectoryContents("/files/" + username + "/");
-            this.files = directoryItems
-            console.log(this.files)
-            this.listFilesBoolean = true
-            
-        },
+    async listFiles() {
+      var client = this.$store.getters.StateWebdavClient;
+      var username = this.$store.getters.StateUsername;
+      const directoryItems = await client.getDirectoryContents(
+        "/files/" + username + "/"
+      );
+      console.log(directoryItems);
     },
-    watch: {
-        /**
-         * Watcher for the "isAuthenticated" function in the "computed" object.
-         * The moment the value changes this watcher-function is triggered.
-         * If newValue is true, this means the user has logged in and we redirect him to home
-         * If oldValue is true, this means he is not logged in anymore and we redirect him to the lobby  
-         */
-        isAuthenticated: function(newValue, oldValue) {
-            if(newValue) {
-                this.$router.push("/");
-            }
-            if(oldValue) {
-                this.$router.push("/lobby");
-            }
-        }
-    }
+  },
+  watch: {
+    /**
+     * Watcher for the "isAuthenticated" function in the "computed" object.
+     * The moment the value changes this watcher-function is triggered.
+     * If newValue is true, this means the user has logged in and we redirect him to home
+     * If oldValue is true, this means he is not logged in anymore and we redirect him to the lobby
+     */
+    isAuthenticated: function (newValue, oldValue) {
+      if (newValue) {
+        this.$router.push("/");
+      }
+      if (oldValue) {
+        this.$router.push("/lobby");
+      }
+    },
+  },
 };
 </script>
 
@@ -88,7 +69,8 @@ export default {
 a:hover {
   cursor: pointer;
 }
-#login, #logout{
-    float: right;
+#login,
+#logout {
+  float: right;
 }
 </style>

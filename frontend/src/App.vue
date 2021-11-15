@@ -2,7 +2,6 @@
   <div>
     <ActionBar />
     <router-view />
-    <ShowFiles />
   </div>
 </template>
 
