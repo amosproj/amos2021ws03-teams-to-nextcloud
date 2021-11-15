@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ActionBar />
+    <ActionBar v-bind:actions="getEnabledActions" />
     <router-view />
   </div>
 </template>
@@ -13,6 +13,19 @@ export default {
   name: "App",
   components: {
     ActionBar,
+  },
+  computed: {
+    getEnabledActions: function () {
+      let actions = this.$store.getters.StateActions;
+      
+      /* 
+      actions.filter((action) => {
+        action.setEnabled(true); // Try to enable the action. Set enabled has to check if this can be done.
+        return action.isEnabled(); // Return the result
+      });
+     */      
+      return actions;
+    },
   },
 };
 </script>
