@@ -80,7 +80,7 @@ const actions = {
         try {
             let username = data.loginName;
             let password = data.appPassword;
-            const client = createClient("https://tms2nc.de/remote.php/dav", {
+            const client = createClient("https://nextcloud.tms2nc.de/remote.php/dav", {
                 username: username,
                 password: password
             });
