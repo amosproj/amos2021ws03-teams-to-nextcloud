@@ -56,8 +56,7 @@ const actions = {
      */
     async pollEndpoint({dispatch, commit, getters }, poll) {
         const response = await axios.post(poll.endpoint, {token: poll.token}, {validateStatus: false});
-        console.log(response);
-        // If the response status is 404 -> Poll again after 3 second
+        // If the response status is 404 -> Poll again after 3 seconds
         if(response.status == 404) {
             setTimeout(function(){ dispatch('pollEndpoint', poll) }, 3000);
         }
@@ -69,7 +68,7 @@ const actions = {
             if(getters.StateWebdavClient != null) {
                 commit("setUser", response.data);
             }
-            // else login failed ???
+            // TODO: handle failed login
         }
     },
 
