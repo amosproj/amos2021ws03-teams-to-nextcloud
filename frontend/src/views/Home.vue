@@ -1,32 +1,24 @@
 <template>
   <div class="home">
-    <!--
-    Here we add our next components: Lets say
-    -----------------------------------------
-    AddressBar.vue  
-    -----------------------------------------
-    FileList.vue
-      File.vue
-      File.vue
-      ...
-    -----------------------------------------
-    AddressBar contains the current path. The FileList component contains all the file components and so on... 
-     -->
+    <AddressBar v-bind:path="this.path" />
     <FileList v-bind:fileList="this.fileList" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import AddressBar from "@/components/AddressBar.vue";
 import FileList from "@/components/FileList.vue";
 
 export default {
   name: "Home",
   components: {
+    AddressBar,
     FileList,
   },
   data() {
     return {
+      path: [{ filename: "Documents/Test", basename: "Test" }, { filename: "Documents/Test/Example", basename: "Example" }],
       fileList: [],
     };
   },
