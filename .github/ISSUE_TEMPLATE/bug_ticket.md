@@ -1,3 +1,7 @@
+---
+name: Bug report
+about: Report a bug to the project
+---
 ### Bug ticket
 `Describe the issue and context of the issue`
 
