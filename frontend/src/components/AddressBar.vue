@@ -1,22 +1,23 @@
 <template>
   <div class="container-fluid">
     <div class="row flex-row flex-nowrap addressBar">
-      <span>Documents</span>
-      <div v-for="directory in path" :key="directory.filename">
-        <img
-          src="https://docs.nextcloud.com/server/22/developer_manual/_images/arrow-right.png"
-          class="fileSeparator"
-        />
-        <span>{{ directory.basename }}</span>
-      </div>
+      <Address
+        v-for="(directory, index) in path"
+        v-bind:key="directory.path"
+        v-bind:directory="directory"
+        v-bind:index="index"
+      ></Address>
     </div>
   </div>
 </template>
 
 <script>
+// @ is an alias to /src
+import Address from "@/components/Address.vue";
+
 export default {
   name: "AddressBar",
-  components: {},
+  components: { Address },
   props: ["path"],
 };
 </script>
@@ -24,13 +25,8 @@ export default {
 <style>
 .addressBar {
   height: 40px;
-  padding: 8px 16px 0px 16px;
+  padding: 8px 16px 0px 36px;
   overflow: auto;
   white-space: nowrap;
-}
-.fileSeparator {
-  width: 16px;
-  height: 16px;
-  margin: 4px;
 }
 </style>

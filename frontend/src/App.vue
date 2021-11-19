@@ -16,17 +16,15 @@ export default {
   },
   computed: {
     getEnabledActions: function () {
-      let actions = this.$store.getters.StateActions;
-      
-      /* 
-      actions.filter((action) => {
-        action.setEnabled(true); // Try to enable the action. Set enabled has to check if this can be done.
-        return action.isEnabled(); // Return the result
-      });
-     */      
-      return actions;
+      return this.$store.getters.StateEnabledActions;
     },
   },
+  created: function () {
+    // If the user is authenticated when the Vue instance is created -> Refresh the webdav client
+    if(this.$store.getters.isAuthenticated) {
+      this.$store.dispatch("refreshWebdavClient");
+    }
+  }
 };
 </script>
 

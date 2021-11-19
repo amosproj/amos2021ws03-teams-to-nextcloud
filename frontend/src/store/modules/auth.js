@@ -11,21 +11,21 @@ const getters = {
     /**
      * Checks if the user is autheticated.
      */
-    isAuthenticated: function(state) {
+    isAuthenticated: function (state) {
         return state.username != null;
     },
 
     /**
      * Returns the username of the currently logged in user.
      */
-    StateUsername: function(state) {
+    StateUsername: function (state) {
         return state.username;
     },
 
     /**
      * Returns a webdav client to the NextCloud instnace.
      */
-    StateWebdavClient: function(state) {
+    StateWebdavClient: function (state) {
         return state.webdavClient;
     }
 };
@@ -37,12 +37,12 @@ const actions = {
      * Reference:
      * https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2
      */
-    async initLogin({dispatch}) {
+    async initLogin({ dispatch }) {
         const response = await axios.post('index.php/login/v2');
         dispatch('openDefaultBrowser', response.data.login);
         dispatch('pollEndpoint', response.data.poll);
     },
-    
+
     /**
      * Opens the given url in the default browser.
      */
@@ -54,18 +54,18 @@ const actions = {
      * Starts polling the NextCloud endpoint with the token which we got.
      * When the user completes the login in the browser, we commit the setUser() mutation with the username.
      */
-    async pollEndpoint({dispatch, commit, getters }, poll) {
-        const response = await axios.post(poll.endpoint, {token: poll.token}, {validateStatus: false});
+    async pollEndpoint({ dispatch, commit, getters }, poll) {
+        const response = await axios.post(poll.endpoint, { token: poll.token }, { validateStatus: false });
         // If the response status is 404 -> Poll again after 3 seconds
-        if(response.status == 404) {
-            setTimeout(function(){ dispatch('pollEndpoint', poll) }, 3000);
+        if (response.status == 404) {
+            setTimeout(function () { dispatch('pollEndpoint', poll) }, 3000);
         }
         //-- If the response is 200 -> Save the user data
-        if(response.status == 200) {
+        if (response.status == 200) {
             // Create a Webdav client
             await dispatch("initWebdavClient", response.data);
             // Commit the user once we have the webdav client
-            if(getters.StateWebdavClient != null) {
+            if (getters.StateWebdavClient != null) {
                 commit("setUser", response.data);
             }
             // TODO: handle failed login
@@ -75,24 +75,36 @@ const actions = {
     /**
      * Initiates a client connection to the webdav endpoint of the NextClound instance and save this connection in the store.
      */
-    async initWebdavClient({commit}, data) {
+    async initWebdavClient({ commit }, data) {
         try {
             let username = data.loginName;
             let password = data.appPassword;
-            const client = createClient("https://nextcloud.tms2nc.de/remote.php/dav", {
+            //process.env.<varname>
+            const client = createClient("http://localhost:8080/remote.php/dav", {
                 username: username,
                 password: password
             });
             commit("setWebdavClient", client);
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     },
 
     /**
+     * Refreshes the webdav client connection if the user is authenticated.
+     */
+    async refreshWebdavClient({ dispatch, state }) {
+        let data = {
+            loginName: state.username,
+            appPassword: state.password,
+        }
+        await dispatch("initWebdavClient", data);
+    },
+
+    /**
      * Commits the logout. Internally the user data gets cleared.
      */
-    async logout({commit}){
+    async logout({ commit }) {
         commit('logout');
     }
 };
@@ -116,7 +128,7 @@ const mutations = {
     /**
      * Clears the current user data
      */
-    logout(state){
+    logout(state) {
         state.username = null;
         state.password = null;
         state.webdavClient = null;
@@ -124,8 +136,8 @@ const mutations = {
 };
 
 export default {
-  state,
-  getters,
-  actions,
-  mutations
+    state,
+    getters,
+    actions,
+    mutations
 };

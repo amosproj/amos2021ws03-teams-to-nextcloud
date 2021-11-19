@@ -5,7 +5,7 @@ import { store } from './store';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'https://nextcloud.tms2nc.de/';
+axios.defaults.baseURL = 'http://localhost:8080/';
 
 createApp(App)
 .use(router)

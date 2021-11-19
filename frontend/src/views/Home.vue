@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <AddressBar v-bind:path="this.path" />
+    <AddressBar v-bind:path="path" />
     <FileList v-bind:fileList="this.fileList" />
   </div>
 </template>
@@ -16,19 +16,17 @@ export default {
     AddressBar,
     FileList,
   },
-  data() {
-    return {
-      path: [{ filename: "Documents/Test", basename: "Test" }, { filename: "Documents/Test/Example", basename: "Example" }],
-      fileList: [],
-    };
+  computed: {
+    path() {
+      return this.$store.state.files.path;
+    },
+    fileList() {
+      return this.$store.state.files.children;
+    }
   },
-  async mounted() {
-    var client = this.$store.getters.StateWebdavClient;
-    var username = this.$store.getters.StateUsername;
-    console.log(client);
-    this.fileList = await client.getDirectoryContents(
-      "/files/" + username + "/"
-    );
+  mounted() {
+    this.$store.dispatch("initPath");
+    this.$store.dispatch("loadChildrenForPath");
   },
 };
 </script>

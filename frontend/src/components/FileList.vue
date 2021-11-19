@@ -18,11 +18,9 @@
       </thead>
       <tbody>
         <File
-          v-for="(file, index) in fileList"
-          v-bind:key="file.filename"
-          v-bind:index="index"
-          v-bind:name="file.basename"
-          v-bind:lastModified="file.lastmod"
+          v-for="file in fileList"
+          v-bind:key="file.path"
+          v-bind:file="file"
         ></File>
       </tbody>
     </table>
