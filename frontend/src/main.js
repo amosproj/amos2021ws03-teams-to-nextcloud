@@ -5,7 +5,7 @@ import { store } from './store';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:8080/';
+axios.defaults.baseURL = process.env.VUE_APP_NEXTCLOUD_BASE_URL;
 
 createApp(App)
 .use(router)

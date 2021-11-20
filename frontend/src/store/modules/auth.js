@@ -80,7 +80,7 @@ const actions = {
             let username = data.loginName;
             let password = data.appPassword;
             //process.env.<varname>
-            const client = createClient("http://localhost:8080/remote.php/dav", {
+            const client = createClient(process.env.VUE_APP_NEXTCLOUD_BASE_URL + "remote.php/dav", {
                 username: username,
                 password: password
             });
