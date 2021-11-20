@@ -100,6 +100,7 @@ const state = {
             },
             execute: function (pointerEvent) {
                 console.log(pointerEvent);
+                window.open(process.env.VUE_APP_NEXTCLOUD_BASE_URL, "_blank");  // can add rel=noreferrer noopener for more security
                 console.log("Hello");
             }
         },
