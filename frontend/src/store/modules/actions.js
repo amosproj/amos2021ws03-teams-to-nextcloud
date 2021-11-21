@@ -59,6 +59,23 @@ const state = {
             }
         },
         {
+            name: "Rename",
+            img: "./images/pencil-square.svg",
+            enabled: false,
+            isEnabled: function () {
+                return store.getters.StateSelectedChildren.length == 1;
+            },
+            setEnabled: function (enabled) {
+                this.enabled = enabled;
+            },
+            execute: function(){
+                let selectedFiles = store.getters.StateSelectedChildren;
+                if(selectedFiles.length == 1){
+                    selectedFiles[0].inEdit = !selectedFiles[0].inEdit;
+                }
+            }
+        },
+        {
             name: "Copy link",
             img: "./images/copy-link-button.svg",
             enabled: true,
@@ -104,6 +121,7 @@ const state = {
                 console.log("Hello");
             }
         },
+        
     ],
 };
 
