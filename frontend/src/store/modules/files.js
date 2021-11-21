@@ -66,7 +66,33 @@ const actions = {
                 child.selected = selected;
             }
         });
+    },
+
+    removeEditField(_, data){
+        data.file.inEdit = false;
+    },
+
+    async editFileName({ commit, getters}, data){
+        let selectedFile = data.file;
+        let newName = data.name;
+        if(newName === ""){
+            return
+        }
+        let client = getters.StateWebdavClient;
+        selectedFile.inEdit = false;
+        selectedFile.name = newName;
+        let newPath = selectedFile.path.split('/').slice(0, -1).join('/') + '/' + newName.trim();
+        try{
+            await client.moveFile(selectedFile.path, newPath) ;
+        }
+        catch(error){
+            console.error(error)
+        }
+        let updatedFiles = await client.getDirectoryContents(selectedFile.path.split('/').slice(0,-1).join('/'));
+        let children = updatedFiles.map(file => new FileWrapper(file.basename, file.filename, file.type == "directory", file.type == "file", file.lastmod));
+        commit("setChildren", children)
     }
+
 };
 
 const mutations = {
