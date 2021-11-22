@@ -88,9 +88,7 @@ const actions = {
         catch(error){
             console.error(error)
         }
-        let updatedFiles = await client.getDirectoryContents(selectedFile.path.split('/').slice(0,-1).join('/'));
-        let children = updatedFiles.map(file => new FileWrapper(file.basename, file.filename, file.type == "directory", file.type == "file", file.lastmod));
-        commit("setChildren", children)
+        await actions.loadChildrenForPath({commit, getters})
     }
 
 };
