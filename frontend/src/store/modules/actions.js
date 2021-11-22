@@ -24,7 +24,7 @@ const state = {
             },
             execute: function (pointerEvent) {
                 console.log(pointerEvent);
-                console.log("Hello");
+                console.log("Pressed: New");
             }
         },
 
@@ -40,7 +40,7 @@ const state = {
             },
             execute: function (pointerEvent) {
                 console.log(pointerEvent);
-                console.log("Hello");
+                console.log("Pressed: Upload");
             }
         },
         {
@@ -55,12 +55,12 @@ const state = {
             },
             execute: function (pointerEvent) {
                 console.log(pointerEvent);
-                console.log("Hello");
+                console.log("Pressed: Sync");
             }
         },
         {
             name: "Rename",
-            img: "./images/pencil-square.svg",
+            img: "./images/rename-button.svg",
             enabled: false,
             isEnabled: function () {
                 return store.getters.StateSelectedChildren.length == 1;
@@ -87,7 +87,7 @@ const state = {
             },
             execute: function (pointerEvent) {
                 console.log(pointerEvent);
-                console.log("Hello");
+                console.log("Pressed: Copy link");
             }
         },
         {
@@ -102,7 +102,7 @@ const state = {
             },
             execute: function (pointerEvent) {
                 console.log(pointerEvent);
-                console.log("Hello");
+                console.log("Pressed: Download");
             }
         },
         {
@@ -118,10 +118,39 @@ const state = {
             execute: function (pointerEvent) {
                 console.log(pointerEvent);
                 window.open(process.env.VUE_APP_NEXTCLOUD_BASE_URL, "_blank");  // can add rel=noreferrer noopener for more security
-                console.log("Hello");
+                console.log("Pressed: Open in NextCloud");
             }
         },
-        
+        {
+            name: "Delete",
+            img: "./images/delete-button.svg",
+            enabled: true,
+            isEnabled: function () {
+                return this.enabled;
+            },
+            setEnabled: function (enabled) {
+                // New File is available only in current directory
+                if(enabled) {
+                    let selected = store.getters.StateSelectedChildren;
+                    // If there are selected items -> Set disabled
+                    if(Array.isArray(selected) && selected.length == 0) {
+                        this.enabled = false;
+                        return;
+                    }
+                }
+                this.enabled = enabled;
+            },
+            async execute (pointerEvent) {
+                console.log(pointerEvent);
+                let client = store.getters.StateWebdavClient;
+                let selected = store.getters.StateSelectedChildren;
+                console.log(selected);
+                for (let i = 0; i < selected.length; i++) {
+                    await client.deleteFile(selected[i].path);
+                }
+                store.dispatch("loadChildrenForPath");
+            }
+        }
     ],
 };
 
