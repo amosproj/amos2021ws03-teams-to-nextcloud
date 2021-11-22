@@ -12,7 +12,7 @@
       </a>
     </td>
     <td v-show="file.inEdit" class="text-left">
-        <input type="text" class="text-left filename-input" :value="file.name" @keydown.enter="submitEdit" @blur="removeEditField" @click.stop/>
+        <input type="text" class="text-left filename-input" :value="file.name" @keydown.enter="submitEdit" @keydown.escape="removeEditField" @blur="removeEditField" @click.stop/>
     </td>
     <td class="text-left">{{ file.lastModified }}</td>
   </tr>
