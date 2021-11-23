@@ -7,8 +7,6 @@ This documentation has the following structure:
 2. How to use
 3. Release
 
-If you are not interested in the technical details you can skip to the last part of this document.
-
 ## 0. Prerequisites
 
 In order to execute the deployment the following technologies need to be installed:
