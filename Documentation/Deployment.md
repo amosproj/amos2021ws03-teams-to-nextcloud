@@ -5,6 +5,7 @@ This documentation has the following structure:
 0. Prerequisites
 1. Technical details of the deployment
 2. How to use
+3. Release
 
 If you are not interested in the technical details you can skip to the last part of this document.
 
@@ -103,3 +104,26 @@ docker-compose up -d
 ```
 
 You should now be able to reach the Nextcloud instance and the frontend using the domains you have set up for them.
+
+## 3. Release
+
+In order to release a new version of the software enter the live instance where it is running and open the folder of the project
+in the terminal. Then run the following commands:
+
+Checkout new version:
+```bash
+git fetch
+git checkout tags/<new version>
+```
+
+Build frontend:
+```bash
+npm install
+npm run build
+```
+
+Restart the frontend container:
+```bash
+docker ps # to get id of frontend container
+docker restart <frontend container id>
+```
