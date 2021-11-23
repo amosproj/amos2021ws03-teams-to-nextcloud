@@ -22,7 +22,7 @@ git clone git@github.com:amosproj/amos2021ws03-teams-to-nextcloud.git
 cd amos2021ws03-teams-to-nextcloud/deployment
 ```
 
-**Important:** The deployment is created for deploying on a live instance with a public ip and a registered top level domain.
+**Important:** The deployment is created for deploying on a live instance with a public IP and a registered top level domain.
 
 ## 1. Technical Details
 
