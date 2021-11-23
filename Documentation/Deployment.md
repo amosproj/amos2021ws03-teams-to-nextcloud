@@ -12,7 +12,7 @@ This documentation has the following structure:
 In order to execute the deployment the following technologies need to be installed:
 
 1. Docker - [Installation Guide](https://docs.docker.com/get-docker/)
-2. Docker Compose [Installation Guide](https://docs.docker.com/compose/install/)
+2. Docker Compose - [Installation Guide](https://docs.docker.com/compose/install/)
 3. NodeJS and npm - for windows and linux use *nvm*, for mac use *n*
 
 After installing docker, you need to checkout this repository and open the deployment folder. You can do this using the following commands:
