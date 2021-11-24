@@ -44,21 +44,6 @@ const state = {
             }
         },
         {
-            name: "Sync",
-            img: "./images/sync-button.svg",
-            enabled: true,
-            isEnabled: function () {
-                return this.enabled;
-            },
-            setEnabled: function (enabled) {
-                this.enabled = enabled;
-            },
-            execute: function (pointerEvent) {
-                console.log(pointerEvent);
-                console.log("Pressed: Sync");
-            }
-        },
-        {
             name: "Rename",
             img: "./images/rename-button.svg",
             enabled: false,
