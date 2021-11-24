@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { store } from '../store';
 import Home from '../views/Home.vue'
 import Lobby from '../views/Lobby.vue'
+import Configuration from '../views/Configuration.vue'
 
 const routes = [
   {
@@ -15,7 +16,14 @@ const routes = [
     name: 'Lobby',
     component: Lobby,
     meta: { guest: true } // stops authenticated users from accessing this route
+  },
+  {
+    path: '/configuration',
+    name: 'Configuration',
+    component: Configuration,
+    meta: { guest: true }
   }
+
 
 ]
 
