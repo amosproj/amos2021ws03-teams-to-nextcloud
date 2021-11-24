@@ -1,4 +1,5 @@
-import {store} from '@/store/index'
+import {store} from '@/store/index';
+import axios from 'axios';
 
 const state = {
     actions: [
@@ -98,11 +99,42 @@ const state = {
                 return this.enabled;
             },
             setEnabled: function (enabled) {
-                this.enabled = enabled;
+                if(enabled){
+                    this.enabled = false;
+                    let children = store.getters.StateSelectedChildren;
+                    // only show, when the object is an actual file
+                    for(let i = 0; i < children.length;i++){
+                        if(children[i].file){
+                            this.enabled = enabled;
+                        }
+                    }
+                }
             },
             execute: function (pointerEvent) {
                 console.log(pointerEvent);
-                console.log("Pressed: Download");
+                let children = store.getters.StateSelectedChildren;
+                for(let i = 0; i< children.length;i++){
+                    if(children[i].file){
+                        let child = children[i];
+                        let client = store.getters.StateWebdavClient;
+                        let downloadLink = client.getFileDownloadLink(child.name);
+                        let dir = child.path.split(store.getters.StateUsername);
+                        downloadLink = downloadLink.split("dav")[0];
+                        downloadLink = downloadLink.concat("webdav"+dir[1]);
+                        axios({
+                            url:  downloadLink,
+                            method: 'GET',
+                            responseType: 'blob',
+                        }).then((response) => {
+                            const url = window.URL.createObjectURL(new Blob([response.data]));
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.setAttribute('download', child.name);
+                            document.body.appendChild(link);
+                            link.click();
+                        });
+                    }
+                }
             }
         },
         {
