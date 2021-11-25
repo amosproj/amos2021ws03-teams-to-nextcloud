@@ -28,8 +28,6 @@ Press the Preview in Teams button
 
 ### 1.2 Upload to Tenant directly 
 
-[See this guide on how to allow direct upload to the org or teams inside the app store](https://docs.microsoft.com/en-us/microsoftteams/upload-custom-apps#upload)
-
 for this to work the manifest.json file needs to be edited correctly  
 set the following setting to the url where the frontend is hosted:
 ```json
@@ -49,6 +47,9 @@ After that turn the three files from step 0 into a zip file again and upload the
 ![image](https://user-images.githubusercontent.com/16943959/143460375-095ea87b-6972-4570-aa45-a1f23064f8fe.png)
 
 ### 1.3 Add as Admin
+
+[See this guide on how to allow direct upload to the org or teams](https://docs.microsoft.com/en-us/microsoftteams/upload-custom-apps#upload)
+
 
 This is for release versions of this App  
 set up the manifest.json file exactly as in **1.2**
