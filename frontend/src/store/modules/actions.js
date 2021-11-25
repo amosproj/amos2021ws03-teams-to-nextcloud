@@ -49,9 +49,16 @@ const state = {
             img: "./images/rename-button.svg",
             enabled: false,
             isEnabled: function () {
-                return store.getters.StateSelectedChildren.length == 1;
+                return this.enabled;
             },
             setEnabled: function (enabled) {
+                if(enabled) {
+                    //-- If selected children 0 or more than 1 -> disable the action
+                    if(store.getters.StateSelectedChildren.length != 1) {
+                        this.enabled = false;
+                        return;
+                    }
+                }
                 this.enabled = enabled;
             },
             execute: function(){
