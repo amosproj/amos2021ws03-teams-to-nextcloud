@@ -70,6 +70,33 @@ const actions = {
                 }
                 return new FileWrapper(file.basename, file.filename, file.type == "directory", file.type == "file", lastModified);
             });
+
+            children.sort(function (a, b) {
+                // If the files are of the same type
+                if (a.directory == b.directory) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                      return -1;
+                    }
+                    if (nameA > nameB) {
+                      return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                } 
+                // Elements have differnet type -> Directories should come first
+                else {
+                    if(a.directory && b.file) {
+                        return -1;
+                    }
+                    if(a.file && b.directory) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            });
+
             // Save the new children
             commit("setChildren", children);
         }
