@@ -1,8 +1,8 @@
 <template>
-  <tr v-on:click="selectRow">
+  <tr @click="selectRow">
     <td class="text-left">
       <div class="custom-control custom-checkbox">
-        <input v-model="isSelected" type="checkbox" class="form-check-input"/>
+        <input :checked="isSelected" @change="selectFile" type="checkbox" class="form-check-input selection-check-box"/>
       </div>
     </td>
 
@@ -23,30 +23,27 @@ export default {
   name: "File",
   components: {},
   props: ["file"],
-  data (){
-    return {
-        isSelected: false
+  computed: {
+    isSelected(){
+        return this.file.selected
     }
   },
   updated () {
     if(this.file.inEdit){
-        let filenameInput = this.$el.querySelector(".filename-input");
-        filenameInput.focus()
-        filenameInput.select()
+      let filenameInput = this.$el.querySelector(".filename-input");
+      filenameInput.focus();
+      filenameInput.select();
     }
   },
   methods: {
+    selectFile(event){
+      this.setFileSelectedInStore(this.file.path, event.currentTarget.checked);
+    },
     submitEdit: function(event) {
-        this.editFileName(this.file, event.currentTarget.value);
+      this.editFileName(this.file, event.currentTarget.value);
     },
     selectRow: function () {
-      // the checkbox will always sync with this.isSelected
-      this.isSelected = !this.isSelected
-      // since we deselected the current field we are editing make it a non-edit field again
-      if(!this.isSelected){
-        this.removeEditField()
-      }
-      this.setFileSelectedInStore(this.file.path, this.isSelected);
+      this.setFileSelectedInStore(this.file.path, this.file.selected ? false : true)
     },
     setFileSelectedInStore: function (path, selected) {
       // Set the value in the store programmatically

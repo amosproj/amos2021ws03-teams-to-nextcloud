@@ -6,6 +6,8 @@
           <th scope="col" style="width: 16px; text-left">
             <div class="custom-control custom-checkbox">
               <input
+                :checked="allFilesSelected"
+                @change="updateSelectionAll"
                 type="checkbox"
                 class="form-check-input"
                 id="tableCheckbox"
@@ -37,5 +39,22 @@ export default {
     File,
   },
   props: ["fileList"],
+  computed: {
+    allFilesSelected(){
+      let selectedChildren = this.$store.getters.StateSelectedChildren;
+      return selectedChildren.length == this.fileList.length;
+    }
+  },
+  methods: {
+    updateSelectionAll(event){
+      for(let file of this.fileList){
+        file.selected = true;
+        this.$store.dispatch("setFileSelected",{
+          path: file.path,
+          selected: event.currentTarget.checked
+        });
+      }
+    }
+  },
 };
 </script>
