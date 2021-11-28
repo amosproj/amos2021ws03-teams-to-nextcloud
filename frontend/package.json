@@ -11,8 +11,11 @@
     "@microsoft/teams-js": "^1.11.0",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "mitt": "^3.0.0",
+    "moment": "^2.29.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vue-toastification": "^2.0.0-rc.5",
     "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.1.0",
     "webdav": "^4.7.0"

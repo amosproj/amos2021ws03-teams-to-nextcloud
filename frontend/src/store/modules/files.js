@@ -1,4 +1,5 @@
 import FileWrapper from "../../file-wrapper/file-wrapper";
+import moment from 'moment'
 
 const state = {
     path: [],
@@ -20,7 +21,7 @@ const getters = {
         return state.children;
     },
 
-    StateSelectedChildren: function(state) {
+    StateSelectedChildren: function (state) {
         return state.children.filter(child => child.selected);
     }
 };
@@ -52,7 +53,23 @@ const actions = {
             let client = getters.StateWebdavClient;
             let children = await client.getDirectoryContents(lastDirectory.path);
             // Map the contents to FileWrapper objects
-            children = children.map(file => new FileWrapper(file.basename, file.filename, file.type == "directory", file.type == "file", file.lastmod));
+            children = children.map(file => {
+                // Parse the UTC date, so that it looks better
+                let now = moment(new Date()); //todays date
+                let lastmod = moment(file.lastmod); // last modified date
+                let duration = moment.duration(now.diff(lastmod));
+                let days = duration.asDays();
+                let hours = duration.asHours();
+                let lastModified = "";
+                if(hours <= 24) {
+                    lastModified = lastmod.fromNow(); // 3 hours ago, an hour ago
+                } else if(days <= 7) {
+                    lastModified = lastmod.calendar(); // Yesterday at 2:57 AM, Wednesday at 2:58 AM
+                } else {
+                    lastModified = lastmod.format('LL'); // November 28, 2021
+                }
+                return new FileWrapper(file.basename, file.filename, file.type == "directory", file.type == "file", lastModified);
+            });
             // Save the new children
             commit("setChildren", children);
         }
@@ -62,33 +79,33 @@ const actions = {
         let path = data.path;
         let selected = data.selected;
         getters.StateChildren.forEach(child => {
-            if(child.path == path) {
+            if (child.path == path) {
                 child.selected = selected;
             }
         });
     },
 
-    removeEditField(_, data){
+    removeEditField(_, data) {
         data.file.inEdit = false;
     },
 
-    async editFileName({ commit, getters}, data){
+    async editFileName({ commit, getters }, data) {
         let selectedFile = data.file;
         let newName = data.name;
-        if(newName === ""){
+        if (newName === "") {
             return
         }
         let client = getters.StateWebdavClient;
         selectedFile.inEdit = false;
         selectedFile.name = newName;
         let newPath = selectedFile.path.split('/').slice(0, -1).join('/') + '/' + newName.trim();
-        try{
-            await client.moveFile(selectedFile.path, newPath) ;
+        try {
+            await client.moveFile(selectedFile.path, newPath);
         }
-        catch(error){
+        catch (error) {
             console.error(error)
         }
-        await actions.loadChildrenForPath({commit, getters})
+        await actions.loadChildrenForPath({ commit, getters })
     }
 
 };
