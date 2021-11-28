@@ -1,5 +1,6 @@
 import {store} from '@/store/index';
 import axios from 'axios';
+import Upload from '@/actions/Upload';
 
 const state = {
     actions: [
@@ -28,22 +29,7 @@ const state = {
                 console.log("Pressed: New");
             }
         },
-
-        {
-            name: "Upload",
-            img: "./images/upload-button.svg",
-            enabled: true,
-            isEnabled: function () {
-                return this.enabled;
-            },
-            setEnabled: function (enabled) {
-                this.enabled = enabled;
-            },
-            execute: function (pointerEvent) {
-                console.log(pointerEvent);
-                console.log("Pressed: Upload");
-            }
-        },
+        new Upload(),
         {
             name: "Rename",
             img: "./images/rename-button.svg",
@@ -184,14 +170,14 @@ const getters = {
     },
 
     StateEnabledActions: function(state) {
-      // Get all actions
-      let actions = state.actions;
-      // Try enabling the actions and filter these that are disabled after that
-      actions = actions.filter((action) => {
-        action.setEnabled(true);
-        return action.isEnabled();
-      });
-      return actions;
+        // Get all actions
+        let actions = state.actions;
+        // Try enabling the actions and filter these that are disabled after that
+        actions = actions.filter((action) => {
+            action.setEnabled(true);
+            return action.isEnabled();
+        });
+        return actions;
     }
 };
 
