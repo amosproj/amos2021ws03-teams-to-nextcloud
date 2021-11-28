@@ -1,6 +1,7 @@
 import {store} from '@/store/index';
 import axios from 'axios';
 import Upload from '@/actions/Upload';
+import Rename from '@/actions/Rename';
 
 const state = {
     actions: [
@@ -30,30 +31,7 @@ const state = {
             }
         },
         new Upload(),
-        {
-            name: "Rename",
-            img: "./images/rename-button.svg",
-            enabled: false,
-            isEnabled: function () {
-                return this.enabled;
-            },
-            setEnabled: function (enabled) {
-                if(enabled) {
-                    //-- If selected children 0 or more than 1 -> disable the action
-                    if(store.getters.StateSelectedChildren.length != 1) {
-                        this.enabled = false;
-                        return;
-                    }
-                }
-                this.enabled = enabled;
-            },
-            execute: function(){
-                let selectedFiles = store.getters.StateSelectedChildren;
-                if(selectedFiles.length == 1){
-                    selectedFiles[0].inEdit = !selectedFiles[0].inEdit;
-                }
-            }
-        },
+        new Rename(),
         {
             name: "Copy link",
             img: "./images/copy-link-button.svg",
