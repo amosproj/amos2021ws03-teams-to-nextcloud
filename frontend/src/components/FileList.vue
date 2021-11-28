@@ -48,7 +48,6 @@ export default {
   methods: {
     updateSelectionAll(event){
       for(let file of this.fileList){
-        file.selected = true;
         this.$store.dispatch("setFileSelected",{
           path: file.path,
           selected: event.currentTarget.checked
