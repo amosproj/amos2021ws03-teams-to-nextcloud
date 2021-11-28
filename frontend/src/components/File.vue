@@ -39,8 +39,8 @@ export default {
     selectFile(event){
       this.setFileSelectedInStore(this.file.path, event.currentTarget.checked);
     },
-    submitEdit: function(event) {
-      this.editFileName(this.file, event.currentTarget.value);
+    submitEdit: async function(event) {
+        await this.editFileName(this.file, event.currentTarget.value);
     },
     selectRow: function () {
       this.setFileSelectedInStore(this.file.path, this.file.selected ? false : true)
@@ -53,8 +53,9 @@ export default {
       });
       this.$store.getters.StateEnabledActions;
     },
-    editFileName: function(file, name){
-        this.$store.dispatch("editFileName", {file: file, name: name})
+    editFileName: async function(file, name){
+        await this.$store.dispatch("editFileName", {file: file, name: name});
+        await this.$store.dispatch("loadChildrenForPath");
     },
     removeEditField: function(){
         this.$store.dispatch("removeEditField", {file: this.file});

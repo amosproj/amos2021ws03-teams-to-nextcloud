@@ -116,7 +116,7 @@ const actions = {
         data.file.inEdit = false;
     },
 
-    async editFileName({ commit, getters }, data) {
+    async editFileName({ getters }, data) {
         let selectedFile = data.file;
         let newName = data.name;
         if (newName === "") {
@@ -125,14 +125,14 @@ const actions = {
         let client = getters.StateWebdavClient;
         selectedFile.inEdit = false;
         selectedFile.name = newName;
-        let newPath = selectedFile.path.split('/').slice(0, -1).join('/') + '/' + newName.trim();
+        let currentPath = state.path.at(-1).path;
+        let newPath = currentPath + '/' + newName.trim();
         try {
             await client.moveFile(selectedFile.path, newPath);
         }
         catch (error) {
             console.error(error)
         }
-        await actions.loadChildrenForPath({ commit, getters })
     }
 
 };
