@@ -1,7 +1,7 @@
 import {store} from '@/store/index';
-import axios from 'axios';
 import Upload from '@/actions/Upload';
 import Rename from '@/actions/Rename';
+import Download from '@/actions/Download';
 
 const state = {
     actions: [
@@ -47,52 +47,7 @@ const state = {
                 console.log("Pressed: Copy link");
             }
         },
-        {
-            name: "Download",
-            img: "./images/download-button.svg",
-            enabled: true,
-            isEnabled: function () {
-                return this.enabled;
-            },
-            setEnabled: function (enabled) {
-                if(enabled){
-                    this.enabled = false;
-                    let children = store.getters.StateSelectedChildren;
-                    // only show, when the object is an actual file
-                    for(let i = 0; i < children.length;i++){
-                        if(children[i].file){
-                            this.enabled = enabled;
-                        }
-                    }
-                }
-            },
-            execute: function (pointerEvent) {
-                console.log(pointerEvent);
-                let children = store.getters.StateSelectedChildren;
-                for(let i = 0; i< children.length;i++){
-                    if(children[i].file){
-                        let child = children[i];
-                        let client = store.getters.StateWebdavClient;
-                        let downloadLink = client.getFileDownloadLink(child.name);
-                        let dir = child.path.split(store.getters.StateUsername);
-                        downloadLink = downloadLink.split("dav")[0];
-                        downloadLink = downloadLink.concat("webdav"+dir[1]);
-                        axios({
-                            url:  downloadLink,
-                            method: 'GET',
-                            responseType: 'blob',
-                        }).then((response) => {
-                            const url = window.URL.createObjectURL(new Blob([response.data]));
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.setAttribute('download', child.name);
-                            document.body.appendChild(link);
-                            link.click();
-                        });
-                    }
-                }
-            }
-        },
+        new Download(),
         {
             name: "Open in NextCloud",
             img: "./images/nextcloud-button.svg",
