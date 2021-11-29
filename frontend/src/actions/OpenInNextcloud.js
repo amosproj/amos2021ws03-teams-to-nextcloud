@@ -10,7 +10,7 @@ class OpenInNextcloud extends Action {
     setEnabled (enabled) {
         if(enabled) {
             let selected = store.getters.StateSelectedChildren;
-            // If there are selected items -> Set disabled
+            // Hide the button when there are more than 1 selected items
             if(Array.isArray(selected) && selected.length > 1) {
                 this.enabled = false;
                 return;
@@ -21,19 +21,19 @@ class OpenInNextcloud extends Action {
 
     execute (pointerEvent) {
         console.log(pointerEvent);
-        console.log("Pressed: Open in NextCloud");
         let selectedFiles = store.getters.StateSelectedChildren;
         let currentDir = store.getters.StatePath[store.getters.StatePath.length-1].name;
+        // One selected item
         if (selectedFiles.length == 1) {
             if (selectedFiles[0].directory) {
                 window.open(process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=//" + selectedFiles[0].name, "_blank");
             } else {
                 window.open(process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=//" + currentDir, "_blank");
             }
+        // No selected items 
         } else {
             window.open(process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=//" + currentDir, "_blank");
         }
     }
 }
-
 export default OpenInNextcloud;

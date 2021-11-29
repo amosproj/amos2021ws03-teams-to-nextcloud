@@ -3,6 +3,7 @@ import axios from 'axios';
 import Upload from '@/actions/Upload';
 import Rename from '@/actions/Rename';
 import OpenInNextcloud from '@/actions/OpenInNextcloud';
+import Delete from '@/actions/Delete';
 
 const state = {
     actions: [
@@ -95,36 +96,7 @@ const state = {
             }
         },
         new OpenInNextcloud(),
-        {
-            name: "Delete",
-            img: "./images/delete-button.svg",
-            enabled: true,
-            isEnabled: function () {
-                return this.enabled;
-            },
-            setEnabled: function (enabled) {
-                // New File is available only in current directory
-                if(enabled) {
-                    let selected = store.getters.StateSelectedChildren;
-                    // If there are selected items -> Set disabled
-                    if(Array.isArray(selected) && selected.length == 0) {
-                        this.enabled = false;
-                        return;
-                    }
-                }
-                this.enabled = enabled;
-            },
-            async execute (pointerEvent) {
-                console.log(pointerEvent);
-                let client = store.getters.StateWebdavClient;
-                let selected = store.getters.StateSelectedChildren;
-                console.log(selected);
-                for (let i = 0; i < selected.length; i++) {
-                    await client.deleteFile(selected[i].path);
-                }
-                store.dispatch("loadChildrenForPath");
-            }
-        }
+        new Delete()
     ],
 };
 
