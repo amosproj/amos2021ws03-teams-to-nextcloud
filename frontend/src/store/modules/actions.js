@@ -2,6 +2,7 @@ import {store} from '@/store/index';
 import axios from 'axios';
 import Upload from '@/actions/Upload';
 import Rename from '@/actions/Rename';
+import OpenInNextcloud from '@/actions/OpenInNextcloud';
 
 const state = {
     actions: [
@@ -93,22 +94,7 @@ const state = {
                 }
             }
         },
-        {
-            name: "Open in NextCloud",
-            img: "./images/nextcloud-button.svg",
-            enabled: true,
-            isEnabled: function () {
-                return this.enabled;
-            },
-            setEnabled: function (enabled) {
-                this.enabled = enabled;
-            },
-            execute: function (pointerEvent) {
-                console.log(pointerEvent);
-                window.open(process.env.VUE_APP_NEXTCLOUD_BASE_URL, "_blank");  // can add rel=noreferrer noopener for more security
-                console.log("Pressed: Open in NextCloud");
-            }
-        },
+        new OpenInNextcloud(),
         {
             name: "Delete",
             img: "./images/delete-button.svg",
