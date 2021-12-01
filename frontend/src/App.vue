@@ -1,6 +1,7 @@
 <template>
   <div>
     <ActionBar v-bind:actions="getEnabledActions" />
+    <CreateFolderModal v-bind:isModalVisible="getIsModalVisible" />
     <router-view />
     <Upload />
     <ProgressBar />
@@ -10,6 +11,7 @@
 <script>
 // @ is an alias to /src
 import ActionBar from "@/components/ActionBar.vue";
+import CreateFolderModal from "@/components/modals/CreateFolder";
 import Upload from "@/components/Upload.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
 
@@ -17,12 +19,16 @@ export default {
   name: "App",
   components: {
     ActionBar,
+    CreateFolderModal,
     Upload,
     ProgressBar
   },
   computed: {
     getEnabledActions: function () {
       return this.$store.getters.StateEnabledActions;
+    },
+    getIsModalVisible: function () {
+      return this.$store.getters.StateIsModalVisible;
     },
   },
   created: function () {
