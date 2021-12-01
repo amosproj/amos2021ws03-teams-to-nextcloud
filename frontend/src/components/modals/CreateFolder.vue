@@ -112,17 +112,18 @@ export default {
   }
 
   .modal-content {
-    width: 85%;
+    width: 75%;
+    height: fit-content;
   }
 
   .modal-header {
-    padding: 20px 28px 5px;
+    padding: 20px 28px 1px;
     border-bottom: none;
   }
 
   .modal-title {
     color: #2f2a2a;
-    font-size: 20px;
+    font-size: 18px;
   }
 
   #closeButton {
@@ -130,11 +131,12 @@ export default {
   }
 
   .modal-body {
-    padding: 15px 28px 5px;
+    padding: 15px 28px 0;
     height: 74px;
   }
 
   .form-control {
+    font-size: 14px;
     background-color: #f6f6f6;
     border: 1px solid #8e95d7;
   }
@@ -147,23 +149,23 @@ export default {
 
   #errorMessage {
     color: #a02d2d;
-    font-size: 13px;
+    font-size: 12px;
     text-align: left;
     padding-top: 5px;
     padding-left: 2px;
   }
 
   .modal-footer {
-    padding: 10px 28px 25px;
+    padding: 3px 28px 20px;
     border-top: none;
   }
 
   #createButton {
     background-color: #6871b6;
     color: white;
-    font-size: 15px;
-    width: 22%;
-    height: 35px;
+    font-size: 14px;
+    width: 25%;
+    height: 33px;
     padding: 0;
   }
 
