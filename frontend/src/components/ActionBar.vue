@@ -27,21 +27,22 @@
         <!-- Login/Logout Buttons pushed to the right side-->
         <li v-if="isAuthenticated" id="logout" class="nav-item active action">
           <a @click="logout" class="nav-link" href="#">
-            <img
-              src="/images/logout-button.svg"
-              class="d-inline-block align-center"
-              style="width: 24px; height: 24px; padding-right: 2px"
-            />Logout</a
-          >
+            <div class="section">
+              <svg viewBox="0 3.5 28 18" width="22px" height="24px" display="inline">
+                <path d="M16 10v-5l8 7-8 7v-5h-8v-4h8zm-16-8v20h14v-2h-12v-16h12v-2h-14z"/>
+              </svg>Logout
+            </div>
+          </a>
         </li>
         <li v-else id="login" class="nav-item active action">
           <a @click="login" class="nav-link" href="#">
-            <img
-              src="/images/login-button.svg"
-              class="d-inline-block align-center"
-              style="width: 24px; height: 24px; padding-right: 4px"
-            />Login</a
-          >
+            <div class="section">
+              <svg viewBox="0 3.5 28 18" width="22px" height="24px" display="inline">
+                <path d="M8 9v-4l8 7-8 7v-4h-8v-6h8zm2-7v2h12v16h-12v2h14v-20h-14z"/>
+              </svg>
+              Login
+            </div>
+          </a>
         </li>
       </ul>
     </div>
@@ -91,14 +92,17 @@ export default {
 </script>
 
 <style>
-a:hover {
-  cursor: pointer;
-}
-.action {
-  border: 1px solid transparent;
-  margin: 0px 2px;
-}
-.action:hover {
-  border: 1px solid #d0d0d0;
-}
+  a:hover {
+    cursor: pointer;
+  }
+
+  .action {
+    border: 1px solid transparent;
+    margin: 0 2px;
+  }
+
+  .section { color: #2d2d2d; }
+  .section:hover { color: #5861a0; }
+  .section svg { fill: #4b4b4b; }
+  .section:hover svg { fill: #5861a0; }
 </style>

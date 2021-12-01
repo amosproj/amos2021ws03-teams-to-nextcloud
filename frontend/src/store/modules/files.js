@@ -133,8 +133,19 @@ const actions = {
         catch (error) {
             console.error(error)
         }
-    }
+    },
 
+    async createFolder({ commit, getters }, data) {
+        let folderName = data;
+        let client = getters.StateWebdavClient;
+        let path = getters.StatePath[getters.StatePath.length - 1].path + folderName;
+        try {
+            await client.createDirectory(path);
+        } catch (e) {
+            console.error(e);
+        }
+        await actions.loadChildrenForPath({ commit, getters });
+    },
 };
 
 const mutations = {
