@@ -8,6 +8,7 @@ class Rename extends Action {
     constructor() {
         super("rename", "Rename", "./images/rename-button.svg");
     }
+
     setEnabled(enabled) {
       if(enabled) {
         //-- If selected children 0 or more than 1 -> disable the action
@@ -18,6 +19,7 @@ class Rename extends Action {
       }
       this.enabled = enabled;
     }
+    
     execute() {
       let selectedFiles = store.getters.StateSelectedChildren;
       if(selectedFiles.length == 1){

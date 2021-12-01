@@ -9,6 +9,7 @@ class Upload extends Action {
     constructor() {
         super("upload", "Upload", "./images/upload-button.svg");
     }
+
     setEnabled(enabled) {
         // Upload is available only in current directory
         if (enabled) {
@@ -20,6 +21,7 @@ class Upload extends Action {
         }
         return super.setEnabled(enabled);
     }
+    
     execute() {
         // The first time the emitter is null -> Initialize it and add FILE_UPLOAD-listener ONLY ONCE
         if (this.emitter === undefined || this.emitter === null) {
