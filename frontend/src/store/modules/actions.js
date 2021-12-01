@@ -1,5 +1,3 @@
-import {store} from '@/store/index';
-import axios from 'axios';
 import New from '@/actions/New';
 import Upload from '@/actions/Upload';
 import Rename from '@/actions/Rename';
