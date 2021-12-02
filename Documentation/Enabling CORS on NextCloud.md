@@ -1,4 +1,4 @@
-# CORS headers
+# Enabling CORS on NextCloud
 
 This documentation has the following structure:
 
