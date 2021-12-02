@@ -13,7 +13,7 @@ A good undersanding of the following guide is required to know exactly what we a
 
 ## 1. A brief explanation
 
-Basically the problem lies in loading resources from a different origin than the one we are currently at. For example let's say that our frontend webapp is running on `https://tms2nc.de/` and our NextCloud server on `https://nextcloud.tms2nc.de/`. When our webapp wants to make a request to the NextCloud server, the browser sees that it has a differnet origin that the one currently loaded (our frontend). When this happens CORS is the mechanism, which is supposed to control the process of resource loading. There are two types of requests: simple and "preflighted" requests:
+Basically the problem lies in loading resources from a different origin than the one we are currently at. For example let's say that our frontend webapp is running on `https://tms2nc.de/` and our NextCloud server on `https://nextcloud.tms2nc.de/`. When our webapp wants to make a request to the NextCloud server, the browser sees that it has a different origin that the one currently loaded (our frontend). When this happens CORS is the mechanism, which is supposed to control the process of resource loading. There are two types of requests: simple and "preflighted" requests:
 
 1. The simple requests are triggered when we want to read a resource from the different origin. If the webserver doesn't explicitly specify that it allows cross-origin requests from our current origin (`https://tms2nc.de/`) the browser will automatically block all of these requests.
 
