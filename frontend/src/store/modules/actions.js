@@ -4,6 +4,7 @@ import Rename from '@/actions/Rename';
 import OpenInNextcloud from '@/actions/OpenInNextcloud';
 import Delete from '@/actions/Delete';
 import Download from '@/actions/Download';
+import Deselect from '@/actions/Deselect';
 
 const state = {
     isModalVisible: false,
@@ -28,7 +29,8 @@ const state = {
         new Download(),
         new Delete(),
         new Rename(),
-        new OpenInNextcloud()
+        new OpenInNextcloud(),
+        new Deselect(),
     ],
 };
 
