@@ -112,6 +112,12 @@ const actions = {
         });
     },
 
+    setAllFilesUnselected({ getters }) {
+        getters.StateChildren.forEach(child =>{
+            child.selected = false;
+        });
+    },
+
     removeEditField(_, data) {
         data.file.inEdit = false;
     },

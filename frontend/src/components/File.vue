@@ -1,5 +1,5 @@
 <template>
-  <tr @click="selectRow">
+  <tr @click.exact="selectRow" @click.ctrl.left="selectRowMulti">
     <td class="text-left">
       <div class="custom-control custom-checkbox">
         <input :checked="isSelected" @change="selectFile" type="checkbox" class="form-check-input selection-check-box"/>
@@ -25,7 +25,7 @@ export default {
   props: ["file"],
   computed: {
     isSelected(){
-        return this.file.selected
+        return this.file.selected;
     }
   },
   updated () {
@@ -42,7 +42,13 @@ export default {
     submitEdit: async function(event) {
         await this.editFileName(this.file, event.currentTarget.value);
     },
-    selectRow: function () {
+    selectRowMulti: function(){
+      this.setFileSelectedInStore(this.file.path, this.file.selected ? false : true)
+    },
+    selectRow: async function (event) {
+      if(!event.target.classList.contains("selection-check-box")){
+          await this.$store.dispatch("setAllFilesUnselected");
+      }
       this.setFileSelectedInStore(this.file.path, this.file.selected ? false : true)
     },
     setFileSelectedInStore: function (path, selected) {
@@ -70,6 +76,7 @@ export default {
       }
     },
   },
+  
 };
 </script>
 
@@ -80,5 +87,9 @@ a:hover {
 .filename-input{
     border: none;
     outline: none
+}
+td{
+  -moz-user-select: none;
+  user-select: none;
 }
 </style>
