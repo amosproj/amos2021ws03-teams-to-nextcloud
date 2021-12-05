@@ -47,12 +47,15 @@ export default {
     const keyPressEventHandler =  function(event){
         let holdShift = event.shiftKey;
         if(event.key === "ArrowUp"){
+            event.preventDefault();
             store.dispatch('moveSelection', { direction: 'previous', holdShift: holdShift});
         }
         if(event.key === "ArrowDown"){
+            event.preventDefault();
             store.dispatch('moveSelection', { direction: 'next', holdShift: holdShift});
         }
         if(event.key === "Escape"){
+            event.preventDefault();
             store.dispatch("setAllFilesUnselected");
         }
     };
