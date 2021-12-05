@@ -1,5 +1,5 @@
 <template>
-  <tr @click.exact="selectRow" @click.ctrl.left="selectRowMulti">
+  <tr @click.exact="selectRow" @click.ctrl.left="selectRowMulti" @click.shift.left="selectRowRange">
     <td class="text-left">
       <div class="custom-control custom-checkbox">
         <input :checked="isSelected" @change="selectFile" type="checkbox" class="form-check-input selection-check-box"/>
@@ -36,6 +36,9 @@ export default {
     }
   },
   methods: {
+    selectRowRange(){
+      this.$store.dispatch('selectRange', { child: this.file });
+    },
     selectFile(event){
       this.setFileSelectedInStore(this.file.path, event.currentTarget.checked);
     },

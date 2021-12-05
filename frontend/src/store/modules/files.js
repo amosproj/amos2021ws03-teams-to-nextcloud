@@ -162,6 +162,24 @@ const actions = {
         await dispatch('loadChildrenForPath');
     },
     /**
+     * Select the whole range between lastSelectedChild and the file that was clicked on
+     */
+    selectRange({ getters, commit, dispatch }, { child }){
+      let children = getters.StateChildren;
+      let lastSelection = getters.StateLastSelectedChild;
+      let idxSelection = children.map(c => c.path).indexOf(child.path)
+      if(idxSelection !== -1){
+          let startIdx = lastSelection.index > idxSelection ? idxSelection : lastSelection.index;
+          let stopIdx = lastSelection.index > idxSelection ? lastSelection.index : idxSelection;
+          let direction = startIdx - stopIdx < 0 ? 1: -1;
+          dispatch('setAllFilesUnselected');
+          for(let i = startIdx; i <= stopIdx; i = i + direction){
+            commit('setSelectStateOfChild', { selected: true, index: i});
+          }
+          commit('setLastSelectedChild', { index: stopIdx, child: children[stopIdx] });
+      }
+    },
+    /**
      * Move the selection to the next child in the list or the previous child in the list
      * direction should be either "next" or "previous"
      */
