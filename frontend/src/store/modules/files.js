@@ -4,6 +4,7 @@ import moment from 'moment'
 const state = {
     path: [],
     children: [],
+    lastSelectedChild: null,
 };
 
 const getters = {
@@ -23,6 +24,12 @@ const getters = {
 
     StateSelectedChildren: function (state) {
         return state.children.filter(child => child.selected);
+    },
+    /**
+     * Return the child that was selected the most recently, it should be an object in the format { index: Number, child: Object }
+     */
+    StateLastSelectedChild: function(state){
+        return state.lastSelectedChild
     }
 };
 
@@ -102,14 +109,22 @@ const actions = {
         }
     },
 
-    setFileSelected({ getters }, data) {
+    setFileSelected({ getters, commit }, data) {
         let path = data.path;
         let selected = data.selected;
-        getters.StateChildren.forEach(child => {
+        getters.StateChildren.forEach((child, index) => {
             if (child.path == path) {
-                child.selected = selected;
+                commit('setSelectStateOfChild', { selected, index});
+                commit('setLastSelectedChild', { index, child });
             }
         });
+    },
+
+    setAllFilesUnselected({ getters, commit }) {
+        getters.StateChildren.forEach((_, index) =>{
+            commit('setSelectStateOfChild', { selected: false, index});
+        });
+        commit('setLastSelectedChild', null);
     },
 
     removeEditField(_, data) {
@@ -135,7 +150,7 @@ const actions = {
         }
     },
 
-    async createFolder({ commit, getters }, data) {
+    async createFolder({ getters, dispatch }, data) {
         let folderName = data;
         let client = getters.StateWebdavClient;
         let path = getters.StatePath[getters.StatePath.length - 1].path + folderName;
@@ -144,8 +159,52 @@ const actions = {
         } catch (e) {
             console.error(e);
         }
-        await actions.loadChildrenForPath({ commit, getters });
+        await dispatch('loadChildrenForPath');
     },
+    /**
+     * Select the whole range between lastSelectedChild and the file that was clicked on
+     */
+    selectRange({ getters, commit, dispatch }, { child }){
+      let children = getters.StateChildren;
+      let lastSelection = getters.StateLastSelectedChild;
+      let idxSelection = children.map(c => c.path).indexOf(child.path)
+      if(idxSelection !== -1){
+          let startIdx = lastSelection.index > idxSelection ? idxSelection : lastSelection.index;
+          let stopIdx = lastSelection.index > idxSelection ? lastSelection.index : idxSelection;
+          let direction = startIdx - stopIdx < 0 ? 1: -1;
+          dispatch('setAllFilesUnselected');
+          for(let i = startIdx; i <= stopIdx; i = i + direction){
+            commit('setSelectStateOfChild', { selected: true, index: i});
+          }
+          commit('setLastSelectedChild', { index: stopIdx, child: children[stopIdx] });
+      }
+    },
+    /**
+     * Move the selection to the next child in the list or the previous child in the list
+     * direction should be either "next" or "previous"
+     */
+    moveSelection({ getters, commit, dispatch }, { direction, holdShift }){
+        let lastSelection = getters.StateLastSelectedChild;
+        if(lastSelection === null){
+            return;
+        }
+        let children = getters.StateChildren;
+        let currentIndex = lastSelection.index;
+        let nextIndex = direction === "next" ? currentIndex+1 : currentIndex-1;
+        // don't do anything when the next selection would go outside the range
+        if(nextIndex < 0 || nextIndex >= children.length ){
+            return;
+        }
+        if(!holdShift){
+            dispatch('setAllFilesUnselected');
+        }
+        let nextSelection = children[nextIndex];
+        // when holding shift the last selection doesn't get cleared 
+        // but when going back to the previous selection while holding shift it should deselect the last selection
+        commit('setSelectStateOfChild', { selected: holdShift && !nextSelection.selected , index: currentIndex });
+        commit('setSelectStateOfChild', { selected: true, index: nextIndex});
+        commit('setLastSelectedChild', { index: nextIndex, child: nextSelection});
+    }
 };
 
 const mutations = {
@@ -168,7 +227,32 @@ const mutations = {
      */
     setChildren(state, children) {
         state.children = children;
+    },
+    /**
+     * Set the last selected child 
+     */
+    setLastSelectedChild(state, payload){
+        state.lastSelectedChild = payload;
+    },
+    /**
+     * Set the selection state of the child at the provided index
+     */
+    setSelectStateOfChild(state, { selected, index }){
+        state.children[index].selected = selected;
+    },
+    /**
+     * Set the child into edit mode at the provided index
+     */
+    setInEditMode( state, { inEdit, index}){
+        state.children[index].inEdit = inEdit;
+    },
+    /**
+     * modify the child at the provided index
+     */
+    setChildAt( state, { child, index }){
+        state.children[index] = child;
     }
+
 };
 
 export default {
