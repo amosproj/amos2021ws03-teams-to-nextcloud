@@ -123,8 +123,8 @@ const actions = {
     setAllFilesUnselected({ getters, commit }) {
         getters.StateChildren.forEach((_, index) =>{
             commit('setSelectStateOfChild', { selected: false, index});
-            commit('setLastSelectedChild', null);
         });
+        commit('setLastSelectedChild', null);
     },
 
     removeEditField(_, data) {

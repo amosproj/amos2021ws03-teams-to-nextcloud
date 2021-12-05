@@ -53,6 +53,9 @@ export default {
         if(event.key === "ArrowDown"){
             store.dispatch('moveSelection', { direction: 'next', holdShift: holdShift});
         }
+        if(event.key === "Escape"){
+            store.dispatch("setAllFilesUnselected");
+        }
     };
     onMounted(() =>{
         window.addEventListener("keydown", keyPressEventHandler);
