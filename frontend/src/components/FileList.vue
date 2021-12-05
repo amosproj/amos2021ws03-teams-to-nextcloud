@@ -45,7 +45,6 @@ export default {
     // we need to use the composition api to get the store in the setup
     const store = useStore();
     const keyPressEventHandler =  function(event){
-        event.preventDefault();
         let holdShift = event.shiftKey;
         if(event.key === "ArrowUp"){
             store.dispatch('moveSelection', { direction: 'previous', holdShift: holdShift});
