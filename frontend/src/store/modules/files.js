@@ -4,6 +4,7 @@ import moment from 'moment'
 const state = {
     path: [],
     children: [],
+    lastSelectedChild: null,
 };
 
 const getters = {
@@ -23,6 +24,12 @@ const getters = {
 
     StateSelectedChildren: function (state) {
         return state.children.filter(child => child.selected);
+    },
+    /**
+     * Return the child that was selected the most recently, it should be an object in the format { index: Number, child: Object }
+     */
+    StateLastSelectedChild: function(state){
+        return state.lastSelectedChild
     }
 };
 
@@ -102,19 +109,21 @@ const actions = {
         }
     },
 
-    setFileSelected({ getters }, data) {
+    setFileSelected({ getters, commit }, data) {
         let path = data.path;
         let selected = data.selected;
-        getters.StateChildren.forEach(child => {
+        getters.StateChildren.forEach((child, index) => {
             if (child.path == path) {
-                child.selected = selected;
+                commit('setSelectStateOfChild', { selected, index});
+                commit('setLastSelectedChild', { index, child });
             }
         });
     },
 
-    setAllFilesUnselected({ getters }) {
-        getters.StateChildren.forEach(child =>{
-            child.selected = false;
+    setAllFilesUnselected({ getters, commit }) {
+        getters.StateChildren.forEach((_, index) =>{
+            commit('setSelectStateOfChild', { selected: false, index});
+            commit('setLastSelectedChild', null);
         });
     },
 
@@ -141,7 +150,7 @@ const actions = {
         }
     },
 
-    async createFolder({ commit, getters }, data) {
+    async createFolder({ getters, dispatch }, data) {
         let folderName = data;
         let client = getters.StateWebdavClient;
         let path = getters.StatePath[getters.StatePath.length - 1].path + folderName;
@@ -150,8 +159,30 @@ const actions = {
         } catch (e) {
             console.error(e);
         }
-        await actions.loadChildrenForPath({ commit, getters });
+        await dispatch('loadChildrenForPath');
     },
+
+    /**
+     * Move the selection to the next child in the list or the previous child in the list
+     * direction should be either "next" or "previous"
+     */
+    moveSelection({ getters, commit, dispatch }, { direction, deselect }){
+        let lastSelection = getters.StateLastSelectedChild;
+        if(lastSelection === null){
+            return;
+        }
+        let children = getters.StateChildren;
+        let currentIndex = lastSelection.index;
+        let nextIndex = direction === "next" ? currentIndex+1 : currentIndex-1;
+        if(deselect && (nextIndex >= 0 && nextIndex < children.length )){
+            dispatch('setAllFilesUnselected');
+        }
+        if(nextIndex >= 0 && nextIndex < children.length){
+            commit('setSelectStateOfChild', { selected: !deselect, index: currentIndex });
+            commit('setSelectStateOfChild', { selected: true, index: nextIndex});
+            commit('setLastSelectedChild', { index: nextIndex, child: children[nextIndex]});
+        }
+    }
 };
 
 const mutations = {
@@ -174,7 +205,32 @@ const mutations = {
      */
     setChildren(state, children) {
         state.children = children;
+    },
+    /**
+     * Set the last selected child 
+     */
+    setLastSelectedChild(state, payload){
+        state.lastSelectedChild = payload;
+    },
+    /**
+     * Set the selection state of the child at the provided index
+     */
+    setSelectStateOfChild(state, { selected, index }){
+        state.children[index].selected = selected;
+    },
+    /**
+     * Set the child into edit mode at the provided index
+     */
+    setInEditMode( state, { inEdit, index}){
+        state.children[index].inEdit = inEdit;
+    },
+    /**
+     * modify the child at the provided index
+     */
+    setChildAt( state, { child, index }){
+        state.children[index] = child;
     }
+
 };
 
 export default {
