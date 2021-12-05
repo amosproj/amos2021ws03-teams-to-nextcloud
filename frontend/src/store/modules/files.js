@@ -161,12 +161,11 @@ const actions = {
         }
         await dispatch('loadChildrenForPath');
     },
-
     /**
      * Move the selection to the next child in the list or the previous child in the list
      * direction should be either "next" or "previous"
      */
-    moveSelection({ getters, commit, dispatch }, { direction, deselect }){
+    moveSelection({ getters, commit, dispatch }, { direction, holdShift }){
         let lastSelection = getters.StateLastSelectedChild;
         if(lastSelection === null){
             return;
@@ -174,14 +173,19 @@ const actions = {
         let children = getters.StateChildren;
         let currentIndex = lastSelection.index;
         let nextIndex = direction === "next" ? currentIndex+1 : currentIndex-1;
-        if(deselect && (nextIndex >= 0 && nextIndex < children.length )){
+        // don't do anything when the next selection would go outside the range
+        if(nextIndex < 0 || nextIndex >= children.length ){
+            return;
+        }
+        if(!holdShift){
             dispatch('setAllFilesUnselected');
         }
-        if(nextIndex >= 0 && nextIndex < children.length){
-            commit('setSelectStateOfChild', { selected: !deselect, index: currentIndex });
-            commit('setSelectStateOfChild', { selected: true, index: nextIndex});
-            commit('setLastSelectedChild', { index: nextIndex, child: children[nextIndex]});
-        }
+        let nextSelection = children[nextIndex];
+        // when holding shift the last selection doesn't get cleared 
+        // but when going back to the previous selection while holding shift it should deselect the last selection
+        commit('setSelectStateOfChild', { selected: holdShift && !nextSelection.selected , index: currentIndex });
+        commit('setSelectStateOfChild', { selected: true, index: nextIndex});
+        commit('setLastSelectedChild', { index: nextIndex, child: nextSelection});
     }
 };
 

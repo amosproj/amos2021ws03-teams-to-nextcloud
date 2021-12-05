@@ -46,21 +46,18 @@ export default {
     const store = useStore();
     const keyPressEventHandler =  function(event){
         event.preventDefault();
-        let shouldDeselectOthers = !event.shiftKey;
-        console.log({shouldDeselectOthers});
+        let holdShift = event.shiftKey;
         if(event.key === "ArrowUp"){
-            store.dispatch('moveSelection', { direction: 'previous', deselect: shouldDeselectOthers});
+            store.dispatch('moveSelection', { direction: 'previous', holdShift: holdShift});
         }
         if(event.key === "ArrowDown"){
-            store.dispatch('moveSelection', { direction: 'next', deselect: shouldDeselectOthers});
+            store.dispatch('moveSelection', { direction: 'next', holdShift: holdShift});
         }
     };
     onMounted(() =>{
-        console.log("mounting...")
         window.addEventListener("keydown", keyPressEventHandler);
     });
     onUnmounted(() =>{
-        console.log("unmounting...")
         window.removeEventListener("keydown", keyPressEventHandler);
     });
   },
