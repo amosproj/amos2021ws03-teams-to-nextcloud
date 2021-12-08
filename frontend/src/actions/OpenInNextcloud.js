@@ -23,7 +23,8 @@ class OpenInNextcloud extends Action {
         console.log(pointerEvent);
         let selectedFiles = store.getters.StateSelectedChildren;
         let currentDirPath = store.getters.StatePath[store.getters.StatePath.length-1].path;
-        let currentDirPathSuffix = currentDirPath.replace(new RegExp('.*' + "com"), '');
+        let matchUntilDotComRegex = /.*com/;
+        let currentDirPathSuffix = currentDirPath.replace(matchUntilDotComRegex, '');
         // One selected item
         if (selectedFiles.length == 1) {
             let selectedFilesPathSuffix = selectedFiles[0].path.replace(new RegExp('.*' + "com"), '');
