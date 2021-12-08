@@ -153,7 +153,7 @@ const actions = {
     async createFolder({ getters, dispatch }, data) {
         let folderName = data;
         let client = getters.StateWebdavClient;
-        let path = getters.StatePath[getters.StatePath.length - 1].path + folderName;
+        let path = `${getters.StatePath[getters.StatePath.length - 1].path}/${folderName}`;
         try {
             await client.createDirectory(path);
         } catch (e) {
