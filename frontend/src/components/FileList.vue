@@ -15,10 +15,14 @@
             </div>
           </th>
           <th scope="col" class="text-left">
-            Name<img :src="getOrderIcon('name')" @click="reorderBy('name')" width="16" height="16">
+            <span @click="reorderBy('name')" style="user-select: none">
+              <span>Name</span><img :src="getOrderIcon('name')" width="16" height="16">
+            </span>
           </th>
           <th scope="col" class="text-left">
-            Last Modified<img :src="getOrderIcon('lastModifiedUnixTimestamp')" @click="reorderBy('lastModifiedUnixTimestamp')" width="16" height="16">
+            <span @click="reorderBy('lastModifiedUnixTimestamp')" style="user-select: none">
+              <span>Last Modified</span><img :src="getOrderIcon('lastModifiedUnixTimestamp')" width="16" height="16">
+            </span>
           </th>
         </tr>
       </thead>
