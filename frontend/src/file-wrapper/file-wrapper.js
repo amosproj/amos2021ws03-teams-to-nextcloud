@@ -29,11 +29,6 @@ class FileWrapper {
      */
     selected = false;
 
-    /**
-     * sets the file into Edit mode so that a user can change its filename
-     */
-    inEdit = false;
-
     constructor(name, path, directory, file, lastModified) {
         this.name = name;
         this.path = path;
@@ -82,12 +77,6 @@ class FileWrapper {
     }
     setSelected(b) {
         this.selected = b;
-    }
-    getInEdit(){
-        return this.inEdit;
-    }
-    setInEdit(isEdit){
-        this.inEdit = isEdit;
     }
 }
 

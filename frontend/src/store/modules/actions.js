@@ -7,7 +7,8 @@ import Download from '@/actions/Download';
 import Deselect from '@/actions/Deselect';
 
 const state = {
-    isModalVisible: false,
+    isCreateModalVisible: false,
+    isRenameModalVisible: false,
     actions: [
         new New(),
         new Upload(),
@@ -50,8 +51,12 @@ const getters = {
         return actions;
     },
 
-    StateIsModalVisible: function(state) {
-        return state.isModalVisible;
+    StateIsCreateModalVisible: function(state) {
+        return state.isCreateModalVisible;
+    },
+
+    StateIsRenameModalVisible: function(state) {
+        return state.isRenameModalVisible;
     },
 };
 
@@ -59,8 +64,12 @@ const actions = {
 };
 
 const mutations = {
-    setIsModalVisible(state, isModalVisible) {
-        state.isModalVisible = isModalVisible;
+    setIsCreateModalVisible(state, isCreateModalVisible) {
+        state.isCreateModalVisible = isCreateModalVisible;
+    },
+
+    setIsRenameModalVisible(state, isRenameModalVisible) {
+        state.isRenameModalVisible = isRenameModalVisible;
     },
 };
 
