@@ -127,40 +127,24 @@ const actions = {
         commit('setLastSelectedChild', null);
     },
 
-    removeEditField(_, data) {
-        data.file.inEdit = false;
-    },
-
-    async editFileName({ getters }, data) {
-        let selectedFile = data.file;
-        let newName = data.name;
-        if (newName === "") {
-            return
-        }
-        let client = getters.StateWebdavClient;
-        selectedFile.inEdit = false;
-        selectedFile.name = newName;
-        let currentPath = state.path.at(-1).path;
-        let newPath = currentPath + '/' + newName.trim();
+    async rename({ getters, dispatch }, paths) {
         try {
-            await client.moveFile(selectedFile.path, newPath);
-        }
-        catch (error) {
-            console.error(error)
-        }
-    },
-
-    async createFolder({ getters, dispatch }, data) {
-        let folderName = data;
-        let client = getters.StateWebdavClient;
-        let path = getters.StatePath[getters.StatePath.length - 1].path + folderName;
-        try {
-            await client.createDirectory(path);
+            await getters.StateWebdavClient.moveFile(paths.currentPath, paths.newPath);
         } catch (e) {
             console.error(e);
         }
         await dispatch('loadChildrenForPath');
     },
+
+    async createFolder({ getters, dispatch }, path) {
+        try {
+            await getters.StateWebdavClient.createDirectory(path);
+        } catch (e) {
+            console.error(e);
+        }
+        await dispatch('loadChildrenForPath');
+    },
+
     /**
      * Select the whole range between lastSelectedChild and the file that was clicked on
      */
@@ -240,12 +224,7 @@ const mutations = {
     setSelectStateOfChild(state, { selected, index }){
         state.children[index].selected = selected;
     },
-    /**
-     * Set the child into edit mode at the provided index
-     */
-    setInEditMode( state, { inEdit, index}){
-        state.children[index].inEdit = inEdit;
-    },
+
     /**
      * modify the child at the provided index
      */

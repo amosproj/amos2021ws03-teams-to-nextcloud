@@ -6,13 +6,10 @@
       </div>
     </td>
 
-    <td v-show="!file.inEdit" class="text-left">
+    <td class="text-left">
       <a href="#" @click="open" class="text-dark">
         {{ file.name }}
       </a>
-    </td>
-    <td v-show="file.inEdit" class="text-left">
-        <input type="text" class="text-left filename-input" :value="file.name" @keydown.enter="submitEdit" @keydown.escape="removeEditField" @blur="removeEditField" @click.stop/>
     </td>
     <td class="text-left">{{ file.lastModified }}</td>
   </tr>
@@ -28,22 +25,12 @@ export default {
         return this.file.selected;
     }
   },
-  updated () {
-    if(this.file.inEdit){
-      let filenameInput = this.$el.querySelector(".filename-input");
-      filenameInput.focus();
-      filenameInput.select();
-    }
-  },
   methods: {
     selectRowRange(){
       this.$store.dispatch('selectRange', { child: this.file });
     },
     selectFile(event){
       this.setFileSelectedInStore(this.file.path, event.currentTarget.checked);
-    },
-    submitEdit: async function(event) {
-        await this.editFileName(this.file, event.currentTarget.value);
     },
     selectRowMulti: function(){
       this.setFileSelectedInStore(this.file.path, this.file.selected ? false : true)
@@ -62,13 +49,6 @@ export default {
       });
       this.$store.getters.StateEnabledActions;
     },
-    editFileName: async function(file, name){
-        await this.$store.dispatch("editFileName", {file: file, name: name});
-        await this.$store.dispatch("loadChildrenForPath");
-    },
-    removeEditField: function(){
-        this.$store.dispatch("removeEditField", {file: this.file});
-    },
     open: function (event) {
       if (this.file.file) {
         console.log(this.file);
@@ -86,10 +66,6 @@ export default {
 <style>
 a:hover {
   cursor: pointer;
-}
-.filename-input{
-    border: none;
-    outline: none
 }
 td{
   -moz-user-select: none;

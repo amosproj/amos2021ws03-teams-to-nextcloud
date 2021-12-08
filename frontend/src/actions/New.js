@@ -19,7 +19,7 @@ class New extends Action {
     }
 
     execute() {
-        store.commit("setIsModalVisible", true);
+        store.commit("setIsCreateModalVisible", true);
     }
 }
 
