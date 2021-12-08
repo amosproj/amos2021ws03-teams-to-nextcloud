@@ -15,6 +15,16 @@ class FileWrapper {
     lastModified = null;
 
     /**
+     * The time that the file was last modified as a string for the user.
+     */
+    lastModifiedUserDate = null;
+    
+    /**
+     * The time that the file was last modified as a Unix timestamp.
+     */
+    lastModifiedUnixTimestamp = null;
+
+    /**
      * Boolean value indicating if the file is a directory
      */
     directory = false;

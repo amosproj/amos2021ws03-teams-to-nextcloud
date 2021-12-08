@@ -14,8 +14,12 @@
               />
             </div>
           </th>
-          <th scope="col" class="text-left">Name</th>
-          <th scope="col" class="text-left">Last Modified</th>
+          <th scope="col" class="text-left">
+            Name<img :src="getOrderIcon('name')" @click="reorderBy('name')" width="16" height="16">
+          </th>
+          <th scope="col" class="text-left">
+            Last Modified<img :src="getOrderIcon('lastModifiedUnixTimestamp')" @click="reorderBy('lastModifiedUnixTimestamp')" width="16" height="16">
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -34,6 +38,7 @@
 import File from "@/components/File.vue";
 import { onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
+
 export default {
   name: "FileList",
   components: {
@@ -81,6 +86,20 @@ export default {
           selected: event.currentTarget.checked
         });
       }
+    },
+    reorderBy(orderKey) {
+      this.$store.commit("setCurrentOrderProperty", orderKey);
+      this.$store.commit("orderChildrenByCurrentOrderProperty");
+    },
+    getOrderIcon(orderKey) {
+      if(orderKey === this.$store.getters.StateCurrentOrderProperty) {
+        if(this.$store.getters.StateCurrentOrderDirection === "asc") {
+          return "images/up.svg";
+        } else {
+          return "images/down.svg";
+        }
+      }
+      return "images/bi.svg";
     }
   },
 };
