@@ -27,7 +27,7 @@ class OpenInNextcloud extends Action {
         let currentDirPathSuffix = currentDirPath.replace(matchUntilDotComRegex, '');
         // One selected item
         if (selectedFiles.length == 1) {
-            let selectedFilesPathSuffix = selectedFiles[0].path.replace(new RegExp('.*' + "com"), '');
+            let selectedFilesPathSuffix = selectedFiles[0].path.replace(matchUntilDotComRegex, '');
             if (selectedFiles[0].directory) {
                 window.open(process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=//" + selectedFilesPathSuffix, "_blank");
             } else {
