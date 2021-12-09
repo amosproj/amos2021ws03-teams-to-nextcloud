@@ -11,6 +11,7 @@
     "@microsoft/teams-js": "^1.11.0",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "file-icon-vectors": "^1.0.0",
     "mitt": "^3.0.0",
     "moment": "^2.29.1",
     "vue": "^3.0.0",

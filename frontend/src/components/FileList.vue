@@ -14,6 +14,9 @@
               />
             </div>
           </th>
+          <th style="padding: 12px 0px; width: 24px">
+            <span class="fiv-viv fiv-icon-blank"></span>
+          </th>
           <th scope="col" class="text-left">
             <span @click="reorderBy('name')" style="user-select: none">
               <span>Name</span><img :src="getOrderIcon('name')" width="16" height="16">
@@ -108,3 +111,7 @@ export default {
   },
 };
 </script>
+
+<style>
+  .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 2em; }
+</style>
