@@ -47,7 +47,7 @@ const actions = {
      * Opens the given url in the default browser.
      */
     async openDefaultBrowser(_, strUrl) {
-        window.open(strUrl, '_blank');
+        window.open(strUrl, '_blank', 'noopener noreferrer nofollow');
     },
 
     /**
