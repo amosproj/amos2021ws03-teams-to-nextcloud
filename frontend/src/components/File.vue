@@ -5,7 +5,9 @@
         <input :checked="isSelected" @change="selectFile" type="checkbox" class="form-check-input selection-check-box"/>
       </div>
     </td>
-
+    <td>
+      <span :class="getFileIconClasses()"></span>
+    </td>
     <td class="text-left">
       <a href="#" @click="open" class="text-dark">
         {{ file.name }}
@@ -16,6 +18,8 @@
 </template>
 
 <script>
+import vividCatalog from "file-icon-vectors/dist/icons/vivid/catalog.json";
+
 export default {
   name: "File",
   components: {},
@@ -58,8 +62,27 @@ export default {
         this.$store.dispatch("loadChildrenForPath");
       }
     },
+    getFileIconClasses: function () {
+      let iconClasses = "fiv-viv";
+      if (this.file.directory) {
+        // Add the css class with the folder icon
+        iconClasses += " fiv-icon-folder";
+      } 
+      else {
+        // Get the file extension and then check in the catalog an icon exists for this extension
+        const fileExtension = this.file.name.split('.').pop();
+        if(vividCatalog.includes(fileExtension)) {
+          // Add the css class with the coresponsing extension
+          iconClasses += " fiv-icon-" + fileExtension;
+        }
+        // Add a default icon
+        else {
+          iconClasses += " fiv-icon-blank";
+        }
+      }
+      return iconClasses;
+    },
   },
-  
 };
 </script>
 
