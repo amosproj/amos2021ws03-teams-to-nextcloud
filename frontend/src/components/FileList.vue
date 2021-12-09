@@ -14,8 +14,16 @@
               />
             </div>
           </th>
-          <th scope="col" class="text-left">Name</th>
-          <th scope="col" class="text-left">Last Modified</th>
+          <th scope="col" class="text-left">
+            <span @click="reorderBy('name')" style="user-select: none">
+              <span>Name</span><img :src="getOrderIcon('name')" width="16" height="16">
+            </span>
+          </th>
+          <th scope="col" class="text-left">
+            <span @click="reorderBy('lastModifiedUnixTimestamp')" style="user-select: none">
+              <span>Last Modified</span><img :src="getOrderIcon('lastModifiedUnixTimestamp')" width="16" height="16">
+            </span>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -34,6 +42,7 @@
 import File from "@/components/File.vue";
 import { onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
+
 export default {
   name: "FileList",
   components: {
@@ -81,6 +90,20 @@ export default {
           selected: event.currentTarget.checked
         });
       }
+    },
+    reorderBy(orderKey) {
+      this.$store.commit("setCurrentOrderProperty", orderKey);
+      this.$store.commit("orderChildrenByCurrentOrderProperty");
+    },
+    getOrderIcon(orderKey) {
+      if(orderKey === this.$store.getters.StateCurrentOrderProperty) {
+        if(this.$store.getters.StateCurrentOrderDirection === "asc") {
+          return "images/up.svg";
+        } else {
+          return "images/down.svg";
+        }
+      }
+      return "images/bi.svg";
     }
   },
 };

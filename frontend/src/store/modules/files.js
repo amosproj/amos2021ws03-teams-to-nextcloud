@@ -1,10 +1,18 @@
-import FileWrapper from "../../file-wrapper/file-wrapper";
-import moment from 'moment'
+import FileWrapper from "@/file-wrapper/file-wrapper";
+import { getUserDateFromUTCString } from "@/util/TimeUtil";
+import moment from 'moment';
+import _ from "lodash";
+
 
 const state = {
     path: [],
     children: [],
     lastSelectedChild: null,
+    currentOrderProperty: "name",
+    currentOrderDirection: "asc",
+    additionalOrderProperties: {
+        "name": ["directory", "desc"]
+    }
 };
 
 const getters = {
@@ -30,6 +38,22 @@ const getters = {
      */
     StateLastSelectedChild: function(state){
         return state.lastSelectedChild
+    },
+
+    StateCurrentOrderProperty: function(state) {
+        return state.currentOrderProperty;
+    },
+
+    StateCurrentOrderDirection: function(state) {
+        return state.currentOrderDirection;
+    },
+
+    StateAdditionalPropertiesForCurrentOrderProperty: function(state) {
+        let additionalProperties = [];
+        if(state.currentOrderProperty === "name") {
+            additionalProperties.push(["directory", "desc"]);
+        }
+        return additionalProperties;
     }
 };
 
@@ -41,8 +65,8 @@ const actions = {
         let path = getters.StatePath;
         if (Array.isArray(path) && path.length == 0) {
             var username = getters.StateUsername;
-            let rootName = "Documents"
-            let rootPath = "/files/" + username + "/"
+            let rootName = "Documents";
+            let rootPath = "/files/" + username + "/";
             let rootDir = new FileWrapper(rootName, rootPath, true, false, "");
             commit("pushToPath", rootDir);
         }
@@ -60,52 +84,14 @@ const actions = {
             let client = getters.StateWebdavClient;
             let children = await client.getDirectoryContents(lastDirectory.path);
             // Map the contents to FileWrapper objects
-            children = children.map(file => {
-                // Parse the UTC date, so that it looks better
-                let now = moment(new Date()); //todays date
-                let lastmod = moment(file.lastmod); // last modified date
-                let duration = moment.duration(now.diff(lastmod));
-                let days = duration.asDays();
-                let hours = duration.asHours();
-                let lastModified = "";
-                if(hours <= 24) {
-                    lastModified = lastmod.fromNow(); // 3 hours ago, an hour ago
-                } else if(days <= 7) {
-                    lastModified = lastmod.calendar(); // Yesterday at 2:57 AM, Wednesday at 2:58 AM
-                } else {
-                    lastModified = lastmod.format('LL'); // November 28, 2021
-                }
-                return new FileWrapper(file.basename, file.filename, file.type == "directory", file.type == "file", lastModified);
-            });
-
-            children.sort(function (a, b) {
-                // If the files are of the same type
-                if (a.directory == b.directory) {
-                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
-                    if (nameA < nameB) {
-                      return -1;
-                    }
-                    if (nameA > nameB) {
-                      return 1;
-                    }
-                    // names must be equal
-                    return 0;
-                } 
-                // Elements have differnet type -> Directories should come first
-                else {
-                    if(a.directory && b.file) {
-                        return -1;
-                    }
-                    if(a.file && b.directory) {
-                        return 1;
-                    }
-                    return 0;
-                }
-            });
-
+            children = children.map(file => new FileWrapper(file.basename, file.filename, file.type == "directory", file.type == "file", file.lastmod));
+            // Add the user date
+            children.forEach(file => file.lastModifiedUserDate = getUserDateFromUTCString(file.lastModified));
+            // Add the unix timestamp
+            children.forEach(file => file.lastModifiedUnixTimestamp = moment(file.lastModified).valueOf());
             // Save the new children
             commit("setChildren", children);
+            commit("orderChildrenByCurrentOrderProperty");
         }
     },
 
@@ -230,8 +216,39 @@ const mutations = {
      */
     setChildAt( state, { child, index }){
         state.children[index] = child;
-    }
+    },
 
+    setCurrentOrderProperty(state, orderKey) {
+      // If the current order property is equal to the new order key -> Change the direction
+      if(state.currentOrderProperty === orderKey) {
+        state.currentOrderDirection = state.currentOrderDirection === 'asc' ? 'desc' : 'asc';
+      }
+      state.currentOrderProperty = orderKey;
+    },
+
+    /**
+     * Sort the current children with the given the order properties.
+     */
+     orderChildrenByCurrentOrderProperty(state) {
+        // Order properties. This is an array of tuples. Every tuple contains the order property in the first position and order direction in the second position.
+        const orderByProps = [[state.currentOrderProperty, state.currentOrderDirection]];
+        // Check if there are an additional properties and add them eventually to the array
+        if(state.additionalOrderProperties[state.currentOrderProperty]) {
+            const additionalProps = state.additionalOrderProperties[state.currentOrderProperty];
+            orderByProps.push(additionalProps);
+        }
+        // Freeze every array element so we can access them like tuples
+        orderByProps.forEach(Object.freeze);
+
+        let children = state.children;
+        // For loop allows several reorderings, for example first by name, then by directory
+        for(let i = 0; i < orderByProps.length; i++) {
+            // Order the children using the lodash orderBy function.
+            let [property, direction] = orderByProps[i];
+            children = _.orderBy(children, [property], [direction]);
+        }
+        state.children = children;
+    }
 };
 
 export default {

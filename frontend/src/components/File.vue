@@ -11,7 +11,7 @@
         {{ file.name }}
       </a>
     </td>
-    <td class="text-left">{{ file.lastModified }}</td>
+    <td class="text-left">{{ file.lastModifiedUserDate }}</td>
   </tr>
 </template>
 
