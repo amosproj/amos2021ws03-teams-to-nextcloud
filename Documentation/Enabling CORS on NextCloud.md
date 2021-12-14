@@ -46,8 +46,8 @@ Source: [Header set Access-Control-Allow-Origin in .htaccess doesn't work](https
 
 ```
 RewriteEngine On
-RewriteCond %(REQUEST METHOD} OPTIONS
-RewriteRule ^ (.*) $ $1 (L, R=204]
+RewriteCond %{REQUEST METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [L,R=204]
 ```
 
 Source: [Return empty response from Apache](https://stackoverflow.com/questions/27703871/return-empty-response-from-apache/)
