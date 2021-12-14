@@ -1,19 +1,25 @@
 <template>
-<div :style="{display: 'contents'}">
-    <th scope="col" class="text-left name-column">
-    <slot>
-        <span @click="reorderBy(orderKey)" style="user-select: none">
-        <span>{{header}}</span><img :src="getOrderIcon(orderKey)" width="16" height="16">
-        </span>
-    </slot>
+    <th scope="col" :class="{'text-left': true, resizable}">
+    <div :style="{'display': 'flex', 'justify-content': 'space-between'}">
+        <slot>
+            <span @click="reorderBy(orderKey)" style="user-select: none">
+            <span>{{header}}</span><img :src="getOrderIcon(orderKey)" width="16" height="16">
+            </span>
+        </slot>
+        <div class="resizer" scope="col" v-if="resizable" @mousedown="startResize">
+        </div>
+    </div>
     </th>
-        <div class="resizer" scope="col" v-if="resizable" @mousedown="startResize"></div>
-</div>
 </template>
 
 <script>
 export default {
     name: 'TableHeaderColumn',
+    computed: {
+      storedWidth(){
+        return 0;
+      }
+    },
     props: { 
         'header': String ,
         'orderKey': String,
@@ -29,7 +35,7 @@ export default {
         startResize(){
             console.log(this.$el)
             this.resizing = true;
-            this.resizeColumn = this.$el.querySelector('th');
+            this.resizeColumn = this.$el;
             document.addEventListener('mousemove', this.resize);
             document.addEventListener('mouseup', this.stopResize);
         },
@@ -58,11 +64,9 @@ export default {
 <style>
     .resizer{
         width: 16px;
-        height: 56px;
-        outline: 1px red solid;
         cursor: col-resize;
     }
-    .resizer:hover:after{
+    .resizer:hover::after{
         content: "";
         background: blue;
         width: 1px;

@@ -101,7 +101,4 @@ export default {
 
 <style>
   .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 2em; }
-  .table{
-    width: initial;
-  }
 </style>
