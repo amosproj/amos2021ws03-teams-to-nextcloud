@@ -72,13 +72,6 @@ export default {
         window.removeEventListener("keydown", keyPressEventHandler);
     });
   },
-  data (){
-    return {
-        resizing: false,
-        resizeColumn: null,
-        mousePos: null,
-    }
-  },
   props: ["fileList"],
   computed: {
     allFilesSelected(){
