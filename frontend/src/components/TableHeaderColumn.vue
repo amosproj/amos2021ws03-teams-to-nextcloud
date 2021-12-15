@@ -23,7 +23,6 @@ export default {
     computed: {
         storedWidth(){
             let columnWidth = this.$store.getters.getColumnWidth(this.orderKey);
-            console.log({orderKey: this.orderKey, columnWidth})
             if(columnWidth){
                 return columnWidth;
             }
