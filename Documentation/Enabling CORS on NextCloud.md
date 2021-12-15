@@ -28,7 +28,7 @@ Dealing with simple requests boils down to setting up the right HTTP request/res
 ```
 Header always add Access-Control-Allow-Origin "https://tms2nc.de"
 Header always add Access-Control-Allow-Headers "Authorization, Origin, X-Requested-With, Content-Type, Accept, DNT, X-CustomHeader, Keep-Alive, User-Agent, X-Requested-With, If-Modified-Since, Cache-Control, Content-Range, Range, Depth, Destination"
-Header always add Access-Control-Allow-Methods "GET, HEAD, POST, PUT, OPTIONS, MOVE, DELETE, COPY, LOCK, UNLOCK, PROPFIND, MRCOL"
+Header always add Access-Control-Allow-Methods "GET, HEAD, POST, PUT, OPTIONS, MOVE, DELETE, COPY, LOCK, UNLOCK, PROPFIND, MKCOL"
 Header always add Access-Control-Allow-Credentials "true"
 ```
 
