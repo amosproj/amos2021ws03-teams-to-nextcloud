@@ -47,7 +47,7 @@ export default {
             document.addEventListener('mousemove', this.resize);
             document.addEventListener('mouseup', this.stopResize);
         },
-        stopResize(event){
+        stopResize(){
           document.removeEventListener('mousemove', this.resize);
           this.isResizing = false;
           this.$store.dispatch('storeWidth', { orderKey: this.orderKey, width: this.resizeColumn.style.width });
