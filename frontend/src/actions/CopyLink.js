@@ -21,27 +21,31 @@ class CopyLink extends Action {
 
     async execute (pointerEvent) {
         console.log(pointerEvent);
-        let selectedFiles = store.getters.StateSelectedChildren;
-        let fileName = selectedFiles[0].name;
         let client = store.getters.StateWebdavClient;
         let path = store.getters.StatePath;
         let directoryPath = path[path.length - 1].path;
         if (directoryPath == null) {
             return;
         }
+        let dir = "";
+        // Check if we are in a subfolder or not
         if (!directoryPath.endsWith("/")) {
             directoryPath += "/";
+            // extracts the directory, also deletes last slash in string for clipboard link
+            dir = directoryPath.split(path[0].path)[1].slice(0,-1);
         }
-        let filePath = directoryPath + fileName;
-        const stat4 = await client.customRequest(filePath, { 
+        // Builds path with directory path + fileName
+        let filePath = directoryPath + store.getters.StateSelectedChildren[0].name;
+        const response = await client.customRequest(filePath, { 
             method: "PROPFIND",
-            headers: {
-                Accept: "text/plain",
-                Depth: "0"
-            },
-            responseType: "text",
+            data: '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:fileid/></d:prop> </d:propfind>'
         });
-        console.log(stat4);
+        // Splits the response after the first fileId tag and after the second one to receive the fileId
+        let fileId = response.data.split("<oc:fileid>")[1].split("</oc:fileid>")[0];
+        // Builds link 
+        let clipboardlink = process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=/"+dir+"&openfile="+fileId;
+        // Copy link to clipboard
+        await navigator.clipboard.writeText(clipboardlink);
     }
 }
 export default CopyLink;
