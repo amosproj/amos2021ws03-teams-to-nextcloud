@@ -46,7 +46,6 @@ class Download extends Action {
             let filePath = directoryPath + fileItems[i].name;
             try {
                 // Download the file as array buffer
-                console.log(filePath);
                 const buff = await client.getFileContents(filePath);
                 // Convert array buffer to blob object
                 let blob = new Blob([buff]);
