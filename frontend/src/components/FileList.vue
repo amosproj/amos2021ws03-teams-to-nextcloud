@@ -14,7 +14,7 @@
               />
             </div>
           </th>
-          <TableHeaderColumn :resizable="true">
+          <TableHeaderColumn :resizable="true" orderKey="icon">
             <span class="fiv-viv fiv-icon-blank"></span>
           </TableHeaderColumn>
           <TableHeaderColumn header="Name" orderKey="name" :resizable=true />

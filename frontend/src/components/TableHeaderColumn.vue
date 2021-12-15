@@ -1,12 +1,12 @@
 <template>
-    <th scope="col" :class="{'text-left': true, resizable}">
+    <th scope="col" :class="{'text-left': true, resizable}" :style="{'width': storedWidth}">
     <div :style="{'display': 'flex', 'justify-content': 'space-between'}">
         <slot>
             <span @click="reorderBy(orderKey)" style="user-select: none">
             <span>{{header}}</span><img :src="getOrderIcon(orderKey)" width="16" height="16">
             </span>
         </slot>
-        <div class="resizer" scope="col" v-if="resizable" @mousedown="startResize">
+        <div :class="{'resizer': true, resizing: isResizing}" scope="col" v-if="resizable" @mousedown="startResize">
         </div>
     </div>
     </th>
@@ -15,10 +15,20 @@
 <script>
 export default {
     name: 'TableHeaderColumn',
+    data() {
+        return {
+            isResizing: false
+        }
+    },
     computed: {
-      storedWidth(){
-        return 0;
-      }
+        storedWidth(){
+            let columnWidth = this.$store.getters.getColumnWidth(this.orderKey);
+            console.log({orderKey: this.orderKey, columnWidth})
+            if(columnWidth){
+                return columnWidth;
+            }
+            return null;
+        }
     },
     props: { 
         'header': String ,
@@ -27,21 +37,21 @@ export default {
     },
     methods: {
         resize(event){
-            if(!this.resizing) return;
+            if(!this.isResizing) return;
             let boundingBox = this.resizeColumn.getBoundingClientRect();
             let newWidth = event.clientX - boundingBox.left;
             this.resizeColumn.style.width = `${newWidth}px`;
         },
         startResize(){
-            console.log(this.$el)
-            this.resizing = true;
+            this.isResizing = true;
             this.resizeColumn = this.$el;
             document.addEventListener('mousemove', this.resize);
             document.addEventListener('mouseup', this.stopResize);
         },
         stopResize(event){
-          console.log({event});
           document.removeEventListener('mousemove', this.resize);
+          this.isResizing = false;
+          this.$store.dispatch('storeWidth', { orderKey: this.orderKey, width: this.resizeColumn.style.width });
         },
         reorderBy(orderKey) {
             this.$store.commit("setCurrentOrderProperty", orderKey);
@@ -65,10 +75,23 @@ export default {
     .resizer{
         width: 16px;
         cursor: col-resize;
+        margin-right: -8px;
+    }
+    .resizer::after{
+        background: transparent;
+        transition: 2s ease;
     }
     .resizer:hover::after{
         content: "";
-        background: blue;
-        width: 1px;
+        background: #0f0f0f;
+        width: 2px;
+        position: relative;
+        height: 100%;
+        display: inline-block;
+        transition: 2s ease;
+    }
+    .table th {
+        padding-left: 0;
+        padding-right: 0;
     }
 </style>
