@@ -10,7 +10,7 @@ class CopyLink extends Action {
     setEnabled (enabled) {
         if (enabled) {
             let children = store.getters.StateSelectedChildren;
-            // Only show, when there one object is selected
+            // Only show, when only one object is selected
             if (children.length == 1) {
                 return super.setEnabled(enabled);
             }
@@ -27,12 +27,13 @@ class CopyLink extends Action {
         if (directoryPath == null) {
             return;
         }
-        let dir = "";
-        // Check if we are in a subfolder or not
+        let directoryClipboard = "";
+        // Checks if the selected object is in a subfolder or not
         if (!directoryPath.endsWith("/")) {
+            // If selected object is in a subfolder, adjust path
             directoryPath += "/";
-            // extracts the directory, also deletes last slash in string for clipboard link
-            dir = directoryPath.split(path[0].path)[1].slice(0,-1);
+            // Extracts the name of the directory, also deletes last slash in string for clipboard link
+            directoryClipboard = directoryPath.split(path[0].path)[1].slice(0,-1);
         }
         // Builds path with directory path + fileName
         let filePath = directoryPath + store.getters.StateSelectedChildren[0].name;
@@ -42,10 +43,10 @@ class CopyLink extends Action {
         });
         // Splits the response after the first fileId tag and after the second one to receive the fileId
         let fileId = response.data.split("<oc:fileid>")[1].split("</oc:fileid>")[0];
-        // Builds link 
-        let clipboardlink = process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=/"+dir+"&openfile="+fileId;
+        // Builds link for clipboard 
+        let clipboardLink = process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=/"+directoryClipboard+"&openfile="+fileId;
         // Copy link to clipboard
-        await navigator.clipboard.writeText(clipboardlink);
+        await navigator.clipboard.writeText(clipboardLink);
     }
 }
 export default CopyLink;
