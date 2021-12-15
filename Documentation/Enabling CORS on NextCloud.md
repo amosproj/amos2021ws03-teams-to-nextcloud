@@ -46,7 +46,7 @@ Source: [Header set Access-Control-Allow-Origin in .htaccess doesn't work](https
 
 ```
 RewriteEngine On
-RewriteCond %{REQUEST METHOD} OPTIONS
+RewriteCond %{REQUEST_METHOD} OPTIONS
 RewriteRule ^(.*)$ $1 [L,R=204]
 ```
 
