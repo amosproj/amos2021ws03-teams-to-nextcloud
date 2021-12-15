@@ -14,19 +14,11 @@
               />
             </div>
           </th>
-          <th style="padding: 12px 0px; width: 24px">
+          <TableHeaderColumn :resizable="true" orderKey="icon">
             <span class="fiv-viv fiv-icon-blank"></span>
-          </th>
-          <th scope="col" class="text-left">
-            <span @click="reorderBy('name')" style="user-select: none">
-              <span>Name</span><img :src="getOrderIcon('name')" width="16" height="16">
-            </span>
-          </th>
-          <th scope="col" class="text-left">
-            <span @click="reorderBy('lastModifiedUnixTimestamp')" style="user-select: none">
-              <span>Last Modified</span><img :src="getOrderIcon('lastModifiedUnixTimestamp')" width="16" height="16">
-            </span>
-          </th>
+          </TableHeaderColumn>
+          <TableHeaderColumn header="Name" orderKey="name" :resizable=true />
+          <TableHeaderColumn header="Last Modified" orderKey="lastModifiedUnixTimestamp" :resizable=false />
         </tr>
       </thead>
       <tbody>
@@ -43,6 +35,7 @@
 <script>
 // @ is an alias to /src
 import File from "@/components/File.vue";
+import TableHeaderColumn from '@/components/TableHeaderColumn.vue';
 import { onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 
@@ -50,6 +43,7 @@ export default {
   name: "FileList",
   components: {
     File,
+    TableHeaderColumn
   },
   setup () {
     // since `this` (as in the variable) is not available during setup (or rather is the component instance in an unfinished state, 
@@ -83,7 +77,7 @@ export default {
     allFilesSelected(){
       let selectedChildren = this.$store.getters.StateSelectedChildren;
       return selectedChildren.length == this.fileList.length;
-    }
+    },
   },
   methods: {
     updateSelectionAll(event){
@@ -94,21 +88,7 @@ export default {
         });
       }
     },
-    reorderBy(orderKey) {
-      this.$store.commit("setCurrentOrderProperty", orderKey);
-      this.$store.commit("orderChildrenByCurrentOrderProperty");
-    },
-    getOrderIcon(orderKey) {
-      if(orderKey === this.$store.getters.StateCurrentOrderProperty) {
-        if(this.$store.getters.StateCurrentOrderDirection === "asc") {
-          return "images/up.svg";
-        } else {
-          return "images/down.svg";
-        }
-      }
-      return "images/bi.svg";
-    }
-  },
+  }
 };
 </script>
 
