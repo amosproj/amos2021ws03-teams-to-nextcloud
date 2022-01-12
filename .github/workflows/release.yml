@@ -26,6 +26,9 @@ jobs:
     - name: Zip manifest.json
       run: |
         zip --junk-paths nextcloud.zip ../public/manifest.json ../public/color.png ../public/outline.png
+    - name: Zip Release Build
+      run: |
+        zip dist.zip ./dist
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -36,8 +39,8 @@ jobs:
         release_name: ${{ github.ref }}
         draft: true
         prerelease: false
-    - name: Upload Assets
-      id: upload_assets
+    - name: Upload Manifest
+      id: upload_manifest
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,6 +49,15 @@ jobs:
         asset_path: ./frontend/nextcloud.zip
         asset_name: nextcloud.zip
         asset_content_type: application/zip
-
+    - name: Upload dist
+      id: upload_dist
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+       upload_url: ${{ steps.create_release.outputs.upload_url }}
+       asset_path: ./frontend/dist.zip
+       asset_name: release-code.zip
+       asset_content_type: application/zip
 
 
