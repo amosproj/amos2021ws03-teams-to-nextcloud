@@ -1,10 +1,11 @@
 import Action from "./Action";
 import { store } from '@/store/index';
+import { NavBarIcons } from "@/util/NavBarIcons";
 
 class Deselect extends Action {
 
     constructor() {
-        super("deselect", "0 selected", "m7.5 4.4a1.25 1.25 90 011.77 0l6.615 6.6175 6.615-6.6175a1.25 1.25 90 011.77 1.77l-6.6175 6.615 6.6175 6.615a1.25 1.25 90 01-1.77 1.77l-6.615-6.6175-6.615 6.6175a1.25 1.25 90 01-1.77-1.77l6.6175-6.615-6.6175-6.615a1.25 1.25 90 010-1.77z");
+        super("deselect", "0 selected", NavBarIcons.DESELECT);
     }
 
     setEnabled (enabled) {
