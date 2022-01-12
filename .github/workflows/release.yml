@@ -28,7 +28,7 @@ jobs:
         zip --junk-paths nextcloud.zip ../public/manifest.json ../public/color.png ../public/outline.png
     - name: Zip Release Build
       run: |
-        zip dist.zip ./dist
+        zip dist.zip ./dist/*/**
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
