@@ -93,5 +93,5 @@ export default {
 </script>
 
 <style>
-  .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 2em; }
+  .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 1.4em; }
 </style>
