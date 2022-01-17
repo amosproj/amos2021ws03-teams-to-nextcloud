@@ -23,27 +23,16 @@
           v-bind:execute="action.execute"
         ></Action>
       </ul>
+
+      <!-- The list with the right side actions. -->
       <ul class="navbar-nav ml-auto">
-        <!-- Login/Logout Buttons pushed to the right side-->
-        <li v-if="isAuthenticated" id="logout" class="nav-item active action">
-          <a @click="logout" class="nav-link" href="#">
-            <div class="section">
-              <svg viewBox="0 3.5 28 18" width="22px" height="24px" display="inline">
-                <path d="M16 10v-5l8 7-8 7v-5h-8v-4h8zm-16-8v20h14v-2h-12v-16h12v-2h-14z"/>
-              </svg>Logout
-            </div>
-          </a>
-        </li>
-        <li v-else id="login" class="nav-item active action">
-          <a @click="login" class="nav-link" href="#">
-            <div class="section">
-              <svg viewBox="0 3.5 28 18" width="22px" height="24px" display="inline">
-                <path d="M8 9v-4l8 7-8 7v-4h-8v-6h8zm2-7v2h12v16h-12v2h14v-20h-14z"/>
-              </svg>
-              Login
-            </div>
-          </a>
-        </li>
+        <Action
+          v-for="action in rightSideActions"
+          v-bind:key="action.name"
+          v-bind:name="action.name"
+          v-bind:img="action.img"
+          v-bind:execute="action.execute"
+        ></Action>
       </ul>
     </div>
   </nav>
@@ -63,14 +52,6 @@ export default {
       return this.$store.getters.isAuthenticated;
     },
   },
-  methods: {
-    async login() {
-      await this.$store.dispatch("initLogin");
-    },
-    async logout() {
-      await this.$store.dispatch("logout");
-    },
-  },
   watch: {
     /**
      * Watcher for the "isAuthenticated" function in the "computed" object.
@@ -87,7 +68,7 @@ export default {
       }
     },
   },
-  props: ["actions"],
+  props: ["actions", "rightSideActions"],
 };
 </script>
 
