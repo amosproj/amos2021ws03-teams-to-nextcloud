@@ -1,6 +1,9 @@
 <template>
   <div>
-    <ActionBar v-bind:actions="getEnabledActions" />
+    <ActionBar
+      v-bind:actions="getEnabledActions"
+      v-bind:rightSideActions="getEnabledRightSideActions"
+    />
     <CreateFolderModal v-bind:isCreateModalVisible="getIsCreateModalVisible" />
     <RenameModal v-bind:isRenameModalVisible="getIsRenameModalVisible" />
     <router-view />
@@ -29,6 +32,9 @@ export default {
   computed: {
     getEnabledActions: function () {
       return this.$store.getters.StateEnabledActions;
+    },
+    getEnabledRightSideActions: function () {
+      return this.$store.getters.StateEnabledRightSideActions;
     },
     getIsCreateModalVisible: function () {
       return this.$store.getters.StateIsCreateModalVisible;
