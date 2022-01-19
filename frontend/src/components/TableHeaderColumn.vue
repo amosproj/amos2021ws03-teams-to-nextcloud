@@ -71,26 +71,47 @@ export default {
 </script>
 
 <style>
-    .resizer{
-        width: 16px;
+    .resizer
+    {
         cursor: col-resize;
-        margin-right: -8px;
+        margin-left: auto;
+        margin-right: -3px;
     }
-    .resizer::after{
-        background: transparent;
-        transition: 2s ease;
-    }
-    .resizer:hover::after{
+
+    .resizer::after,
+    .resizer.resizing::after
+    {
         content: "";
-        background: #0f0f0f;
+        background: #dee2e6;
         width: 2px;
         position: relative;
         height: 100%;
+        opacity: 0;
+        transition: opacity 300ms ease;
         display: inline-block;
-        transition: 2s ease;
     }
-    .table th {
-        padding-left: 0;
+
+    .resizer.resizing::after
+    {
+      opacity: 1
+    }
+
+    .resizer.resizing::after
+    {
+        content: "";
+        background: #dee2e6;
+        width: 2px;
+        position: relative;
+        height: 100%;
+        opacity: 1;
+        display: inline-block;
+    }
+    .resizer:hover::after
+    {
+        opacity: 1;
+    }
+    .table th 
+    {
         padding-right: 0;
     }
 </style>

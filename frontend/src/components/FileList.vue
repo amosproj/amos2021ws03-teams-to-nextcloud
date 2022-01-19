@@ -3,7 +3,7 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col" style="width: 16px;">
+          <th scope="col" style="width: 16px; padding-left:0">
             <div class="custom-control custom-checkbox">
               <input
                 :checked="allFilesSelected"
@@ -15,7 +15,7 @@
             </div>
           </th>
           <TableHeaderColumn :resizable="true" orderKey="icon">
-            <span class="fiv-viv fiv-icon-blank"></span>
+            <span class="fiv-viv fiv-icon-blank header"></span>
           </TableHeaderColumn>
           <TableHeaderColumn header="Name" orderKey="name" :resizable=true />
           <TableHeaderColumn header="Last Modified" orderKey="lastModifiedUnixTimestamp" :resizable=false />
@@ -94,7 +94,10 @@ export default {
 
 <style>
   .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 1.4em; }
-
+  .fiv-viv.fiv-icon-blank.header{
+    margin-left: auto;
+    margin-right: 14px;
+    }
   @media (hover: hover) {
     [type=checkbox] {
       visibility: hidden;
