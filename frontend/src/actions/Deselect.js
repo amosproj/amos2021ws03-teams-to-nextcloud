@@ -9,6 +9,12 @@ class Deselect extends Action {
     }
 
     setEnabled (enabled) {
+        // If the user is not authentificated -> disabled the action
+        let isAuthenticated = store.getters.isAuthenticated
+        if(!isAuthenticated) {
+            return super.setEnabled(false);
+        }
+
         if(enabled) {
             let selected = store.getters.StateSelectedChildren;
             // Show the delete button only when there are selected items
