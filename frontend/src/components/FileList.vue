@@ -1,6 +1,6 @@
 <template>
   <div class="fileList">
-    <table class="table table-hover">
+    <table class="table table-hover small">
       <thead>
         <tr>
           <th scope="col" style="width: 16px; padding-left:0">
@@ -93,7 +93,7 @@ export default {
 </script>
 
 <style>
-  .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 1.4em; }
+  .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 1.7em; }
   .fiv-viv.fiv-icon-blank.header{
     margin-left: auto;
     margin-right: 14px;
