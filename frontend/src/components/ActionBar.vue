@@ -73,6 +73,9 @@ export default {
 </script>
 
 <style>
+  .small {
+    font-size: 1.7ex;
+  }
   a:hover {
     cursor: pointer;
   }
