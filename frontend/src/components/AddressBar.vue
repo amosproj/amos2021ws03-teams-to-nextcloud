@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="row flex-row flex-nowrap addressBar">
+    <div class="row flex-row flex-nowrap addressBar small">
       <Address
         v-for="(directory, index) in path"
         v-bind:key="directory.path"
