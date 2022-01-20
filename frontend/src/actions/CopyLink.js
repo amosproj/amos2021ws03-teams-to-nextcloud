@@ -2,6 +2,7 @@ import Action from "./Action";
 import { store } from '@/store/index';
 import { parseXML } from 'webdav';
 import { NavBarIcons } from "@/util/NavBarIcons";
+import { useToast } from "vue-toastification";
 
 class CopyLink extends Action {
 
@@ -25,6 +26,7 @@ class CopyLink extends Action {
         let client = store.getters.StateWebdavClient;
         let path = store.getters.StatePath;
         let directoryPath = path[path.length - 1].path;
+        let toast = useToast();
         if (directoryPath == null) {
             return;
         }
@@ -48,7 +50,10 @@ class CopyLink extends Action {
         // Builds link for clipboard 
         let clipboardLink = process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=/"+directoryClipboard+"&openfile="+fileId;
         // Copy link to clipboard
-        await navigator.clipboard.writeText(clipboardLink);
+        toast.success("Link in clipboard: \n" + clipboardLink);
+        //window.prompt("Test", clipboardLink);
+        //await navigator.clipboard.writeText(clipboardLink);
+        store.commit("setIsCopyLinkModalVisible", true);
     }
 }
 export default CopyLink;

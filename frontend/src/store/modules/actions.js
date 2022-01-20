@@ -10,6 +10,7 @@ import CopyLink from '@/actions/CopyLink';
 const state = {
     isCreateModalVisible: false,
     isRenameModalVisible: false,
+    isCopyLinkModalVisible: false,
     actions: [
         new New(),
         new Upload(),
@@ -45,6 +46,10 @@ const getters = {
     StateIsRenameModalVisible: function(state) {
         return state.isRenameModalVisible;
     },
+
+    StateIsCopyLinkModalVisible: function(state){
+        return state.isCopyLinkModalVisible;
+    }
 };
 
 const actions = {
@@ -58,6 +63,10 @@ const mutations = {
     setIsRenameModalVisible(state, isRenameModalVisible) {
         state.isRenameModalVisible = isRenameModalVisible;
     },
+
+    setIsCopyLinkModalVisible(state, isCopyLinkModalVisible){
+        state.isCopyLinkModalVisible = isCopyLinkModalVisible;
+    }
 };
 
 export default {

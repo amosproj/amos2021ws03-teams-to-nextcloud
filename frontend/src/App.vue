@@ -3,6 +3,7 @@
     <ActionBar v-bind:actions="getEnabledActions" />
     <CreateFolderModal v-bind:isCreateModalVisible="getIsCreateModalVisible" />
     <RenameModal v-bind:isRenameModalVisible="getIsRenameModalVisible" />
+    <CopyLinkModal v-bind:isCopyLinkModalVisible="getIsCopyLinkModalVisible" />
     <router-view />
     <Upload />
     <ProgressBar />
@@ -14,6 +15,7 @@
 import ActionBar from "@/components/ActionBar.vue";
 import CreateFolderModal from "@/components/modals/CreateFolder";
 import RenameModal from "@/components/modals/Rename";
+import CopyLinkModal from "@/components/modals/CopyLink";
 import Upload from "@/components/Upload.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
 
@@ -23,6 +25,7 @@ export default {
     ActionBar,
     CreateFolderModal,
     RenameModal,
+    CopyLinkModal,
     Upload,
     ProgressBar
   },
@@ -35,6 +38,9 @@ export default {
     },
     getIsRenameModalVisible: function () {
       return this.$store.getters.StateIsRenameModalVisible;
+    },
+    getIsCopyLinkModalVisible: function () {
+      return this.$store.getters.StateIsCopyLinkModalVisible;
     },
   },
   created: function () {
