@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
       <div class="modal-content container-fluid" @click.stop="">
         <div class="modal-header">
-          <h5 class="modal-title font-weight-bold">CopyLink</h5>
+          <h5 class="modal-title font-weight-bold">Copy Link</h5>
           <button type="button"
                   class="close"
                   id="closeButton"
@@ -31,20 +31,14 @@
                      type="text"
                      class="form-control"
                      ref="inputField"
-                     placeholder="Enter your new name"
-                     @input="hideErrorMessage"
+                     placeholder="Link"
               >
-              <div v-if='fileFormat !== ""' class="input-group-text">{{fileFormat}}</div>
             </div>
-            <p v-if='errorMessage !== ""' id="errorMessage">{{errorMessage}}</p>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn font-weight-bold" id="saveButton" @click="copylink">
-            Save
-          </button>
-          <button type="button" class="btn font-weight-bold" id="cancelButton" @click="close">
-            Cancel
+          <button type="button" class="btn font-weight-bold" id="copyButton" @click="copylink">
+            Select text
           </button>
         </div>
       </div>
@@ -53,78 +47,54 @@
 </template>
 
 <script>
+import { parseXML } from 'webdav'
+
   export default {
     name: 'CopyLinkModal',
     props: ["isCopyLinkModalVisible"],
     data() {
       return {
         itemName: "",
-        fileFormat: "",
-        initialValuesSet: false,
-        errorMessage: "",
       }
     },
-    updated() {
+    async updated() {
       if (this.isCopyLinkModalVisible) {
-        window.addEventListener('keydown', this.escapeHandler);
-        this.$refs.inputField.focus();
-        if (!this.initialValuesSet) {
-          let selectedItem = this.$store.getters.StateSelectedChildren[0];
-          if (selectedItem.isDirectory()) {
-            this.itemName = selectedItem.name;
-            this.fileFormat = "";
-          }
-          else {
-            this.itemName = selectedItem.name.substring(0, selectedItem.name.lastIndexOf("."));
-            this.fileFormat = selectedItem.name.substring(selectedItem.name.lastIndexOf("."), selectedItem.name.length);
-          }
-          this.initialValuesSet = true;
+        let client = this.$store.getters.StateWebdavClient;
+        let path = this.$store.getters.StatePath;
+        let directoryPath = path[path.length - 1].path;
+        if (directoryPath == null) {
+            return;
         }
+
+        let directoryClipboard = "";
+        // Checks if the selected object is in a subfolder or not
+        if (!directoryPath.endsWith("/")) {
+            // If selected object is in a subfolder, adjust path
+            directoryPath += "/";
+            // Extracts the name of the directory, also deletes last slash in string for clipboard link
+            directoryClipboard = directoryPath.split(path[0].path)[1].slice(0,-1);
+        }
+        // Builds path with directory path + fileName
+        let filePath = directoryPath + this.$store.getters.StateSelectedChildren[0].name;
+        const response = await client.customRequest(filePath, { 
+            method: "PROPFIND",
+            data: '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:fileid/></d:prop> </d:propfind>'
+        });
+        // Splits the response after the first fileId tag and after the second one to receive the fileId
+        const xmlData = await parseXML(response.data);
+        let fileId = xmlData.multistatus.response[0].propstat.prop.fileid;
+        // Builds link
+        this.itemName = process.env.VUE_APP_NEXTCLOUD_BASE_URL + "index.php/apps/files?dir=/"+directoryClipboard+"&openfile="+fileId;
       }
     },
     methods: {
-      escapeHandler(event) {
-        if (event.key === 'Escape') {
-          this.close();
-        }
-      },
-      hideErrorMessage() {
-        if (this.errorMessage !== "") {
-          this.errorMessage = "";
-        }
-      },
       copylink() {
-        if (this.itemName === "") {
-          this.errorMessage = "You can't leave this blank.";
-          return;
-        }
-        let selectedItem = this.$store.getters.StateSelectedChildren[0];
-        let itemNameWithFormat = this.itemName.trim() + this.fileFormat;
-        if (itemNameWithFormat !== selectedItem.name) {
-          let itemExists = false;
-          this.$store.getters.StateChildren.forEach(item => itemExists = itemExists || item.name === itemNameWithFormat);
-          if (itemExists) {
-            if (selectedItem.isDirectory()) {
-              this.errorMessage = "A folder with the name " + '"' + itemNameWithFormat + '"' + " already exists.";
-            }
-            else {
-              this.errorMessage = "A file with the name " + '"' + itemNameWithFormat + '"' + " already exists.";
-            }
-            return;
-          }
-          this.$store.dispatch("copylink", { currentPath: selectedItem.path,
-                                           newPath: this.$store.getters.StatePath.at(-1).path + '/' + itemNameWithFormat });
-          this.close();
-        }
-        else {
-          this.close();
-        }
+        this.$refs.inputField.focus();
+        this.$refs.inputField.select();
+        
       },
       close() {
         this.$store.commit("setIsCopyLinkModalVisible", false);
-        this.initialValuesSet = false;
-        this.errorMessage = "";
-        window.removeEventListener('keydown', this.escapeHandler);
         this.$store.dispatch("setAllFilesUnselected");
       },
     },
@@ -140,40 +110,23 @@
     padding-left: 7px;
   }
 
-  #saveButton {
+  #copyButton {
     background-color: #6871b6;
     color: white;
     font-size: 13px;
-    width: 23%;
+    width: 30%;
     height: 30px;
     padding: 0;
     margin: 0;
   }
 
-  #saveButton:hover {
+  #copyButton:hover {
     background-color: #5861a0;
   }
 
-  #saveButton:focus {
+  #copyButton:focus {
     background-color: #5861a0;
     box-shadow: 0 0 5px #8e95d7;
   }
 
-  #cancelButton {
-    color: #2f2a2a;
-    border: 1px solid #c1c2c9;
-    font-size: 13px;
-    width: 23%;
-    height: 30px;
-    padding: 0;
-  }
-
-  #cancelButton:hover {
-    background-color: #f6f6f6;
-  }
-
-  #cancelButton:focus {
-    background-color: #f6f6f6;
-    box-shadow: 0 0 5px #8e95d7;
-  }
 </style>
