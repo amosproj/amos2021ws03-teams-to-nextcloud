@@ -6,6 +6,8 @@ import Delete from '@/actions/Delete';
 import Download from '@/actions/Download';
 import Deselect from '@/actions/Deselect';
 import CopyLink from '@/actions/CopyLink';
+import Login from '@/actions/Login';
+import Logout from '@/actions/Logout';
 
 const state = {
     isCreateModalVisible: false,
@@ -19,8 +21,12 @@ const state = {
         new Delete(),
         new Rename(),
         new OpenInNextcloud(),
-        new Deselect(),
     ],
+    rightSideActions: [
+        new Deselect(),
+        new Login(),
+        new Logout(),
+    ]
 };
 
 const getters = {
@@ -37,6 +43,17 @@ const getters = {
             return action.isEnabled();
         });
         return actions;
+    },
+
+    StateEnabledRightSideActions: function(state) {
+        // Get all actions
+        let rightSideActions = state.rightSideActions;
+        // Try enabling the actions and filter these that are disabled after that
+        rightSideActions = rightSideActions.filter((action) => {
+            action.setEnabled(true);
+            return action.isEnabled();
+        });
+        return rightSideActions;
     },
 
     StateIsCreateModalVisible: function(state) {
