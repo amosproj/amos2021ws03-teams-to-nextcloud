@@ -1,5 +1,7 @@
 import axios from 'axios';
 const { createClient } = require("webdav");
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 const state = {
     username: null,
@@ -38,9 +40,15 @@ const actions = {
      * https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2
      */
     async initLogin({ dispatch }) {
+      try{
         const response = await axios.post('index.php/login/v2');
         dispatch('openDefaultBrowser', response.data.login);
         dispatch('pollEndpoint', response.data.poll);
+      }
+      catch (error){
+        console.error(error)
+        toast.error(`There was an error while opening the login page: ${error.message}.\nContact the admin of your nextcloud instance if this error persists.`);
+      }
     },
 
     /**
@@ -55,21 +63,29 @@ const actions = {
      * When the user completes the login in the browser, we commit the setUser() mutation with the username.
      */
     async pollEndpoint({ dispatch, commit, getters }, poll) {
+      try{
+
         const response = await axios.post(poll.endpoint, { token: poll.token }, { validateStatus: false });
         // If the response status is 404 -> Poll again after 3 seconds
         if (response.status == 404) {
-            setTimeout(function () { dispatch('pollEndpoint', poll) }, 3000);
+          setTimeout(function () { dispatch('pollEndpoint', poll) }, 3000);
         }
         //-- If the response is 200 -> Save the user data
-        if (response.status == 200) {
-            // Create a Webdav client
-            await dispatch("initWebdavClient", response.data);
-            // Commit the user once we have the webdav client
-            if (getters.StateWebdavClient != null) {
-                commit("setUser", response.data);
-            }
-            // TODO: handle failed login
+        else if (response.status == 200) {
+          // Create a Webdav client
+          await dispatch("initWebdavClient", response.data);
+          // Commit the user once we have the webdav client
+          if (getters.StateWebdavClient != null) {
+            commit("setUser", response.data);
+          }
         }
+        else{
+          toast.error(`Unexpected response from Nextcloud: ${response.status} ${response.statusText}`);
+        }
+      }
+      catch (error){
+        toast.error(`There was an error while opening the login page: ${error.message}.\nContact the admin of your nextcloud instance if this error persists.`);
+      }
     },
 
     /**
@@ -86,7 +102,7 @@ const actions = {
             });
             commit("setWebdavClient", client);
         } catch (e) {
-            console.log(e);
+          toast.error(`An Error occured while initializing connection to Nextcloud: ${e.message}`);
         }
     },
 
