@@ -93,6 +93,11 @@ export default {
 </script>
 
 <style>
+  .table td {
+    padding: 0.5rem;
+    vertical-align: middle;
+  }
+
   .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 1.7em; }
   .fiv-viv.fiv-icon-blank.header{
     margin-left: auto;
