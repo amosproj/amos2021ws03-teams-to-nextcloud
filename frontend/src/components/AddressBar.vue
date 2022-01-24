@@ -25,7 +25,7 @@ export default {
 <style>
 .addressBar {
   height: 40px;
-  padding: 8px 16px 0px 36px;
+  padding: 9.5px 16px 0px 36px;
   overflow: auto;
   white-space: nowrap;
 }
