@@ -32,6 +32,7 @@
                      class="form-control"
                      ref="inputField"
                      placeholder="Link"
+                     readonly
               >
             </div>
           </div>
@@ -59,6 +60,7 @@ import { parseXML } from 'webdav'
     },
     async updated() {
       if (this.isCopyLinkModalVisible) {
+        window.addEventListener('keydown', this.escapeHandler);
         let client = this.$store.getters.StateWebdavClient;
         let path = this.$store.getters.StatePath;
         let directoryPath = path[path.length - 1].path;
@@ -88,6 +90,11 @@ import { parseXML } from 'webdav'
       }
     },
     methods: {
+      escapeHandler(event) {
+        if (event.key === 'Escape') {
+          this.close();
+        }
+      },
       copylink() {
         this.$refs.inputField.focus();
         this.$refs.inputField.select();
