@@ -98,7 +98,12 @@ export default {
     vertical-align: middle;
   }
 
+  .table > thead > tr > th {
+    border: none;
+  }
+
   .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 1.7em; }
+  
   .fiv-viv.fiv-icon-blank.header{
     margin-left: auto;
     margin-right: 14px;
