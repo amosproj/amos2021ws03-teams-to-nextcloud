@@ -2,6 +2,8 @@ import Action from "./Action";
 import { store } from '@/store/index';
 import { useToast } from "vue-toastification";
 import { NavBarIcons } from "@/util/NavBarIcons";
+import JSZip from "jszip";
+import { saveAs } from 'file-saver';
 
 class Download extends Action {
 
@@ -11,9 +13,8 @@ class Download extends Action {
     setEnabled(enabled) {
         if (enabled) {
             let children = store.getters.StateSelectedChildren;
-            let files = children.filter(child => child.file === true);
-            // Only show, when there are selected files and all of them are actually files and not directories
-            if (children.length != 0 && children.length === files.length) {
+            // Only show, when at least one file or directory is selected
+            if (children.length != 0) {
                 return super.setEnabled(enabled);
             }
         }
@@ -37,11 +38,39 @@ class Download extends Action {
         if (!directoryPath.endsWith("/")) {
             directoryPath += "/";
         }
-        // Filter out the items that are only files
+        // Filter out the items that are only files or directories
         let items = store.getters.StateSelectedChildren;
+        let directory = items.filter(items => items.directory === true);
         let fileItems = items.filter(items => items.file === true);
 
-        // Start downloading process for every file
+        // Download all selected directories and zip them each
+        for(let j = 0; j < directory.length; j++){
+            // Get jszip library
+            var zip = JSZip();
+            // Build new path for child elements of directory
+            let newPath = directoryPath + directory[j].name;
+            // Get all items
+            let allItems = await client.getDirectoryContents(newPath,{deep: true});
+            // Iterate through all items
+            for(let x = 0; x < allItems.length; x++){
+                if(allItems[x].type === "directory"){
+                    // Create a folder for all subdirectories
+                    zip.folder(allItems[x].filename.replace(newPath+"/",""));
+                }else if(allItems[x].type === "file"){
+                    // Download all files inside the directory and add them to the zip file
+                    const buff = await client.getFileContents(allItems[x].filename);
+                    zip.file(allItems[x].filename.replace(newPath+"/",""),buff);
+                }
+            }
+
+            // Download the zip file
+            zip.generateAsync({type:"blob"})
+                .then(function (blob) {
+                saveAs(blob, directory[j].name+".zip");
+                });
+            }
+
+        // Download all selected files
         for (let i = 0; i < fileItems.length; i++) {
             // Build the correct path for the file
             let filePath = directoryPath + fileItems[i].name;
