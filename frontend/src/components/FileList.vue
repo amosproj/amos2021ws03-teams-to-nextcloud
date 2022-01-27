@@ -103,11 +103,20 @@ export default {
   }
 
   .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 1.7em; }
-  
-  .fiv-viv.fiv-icon-blank.header{
+
+  .fiv-viv.fiv-icon-blank.header {
+    font-size: 1.1rem;
     margin-left: auto;
     margin-right: 14px;
-    }
+  }
+
+  .table th {
+    font-size: 12px;
+    font-weight: normal;
+    padding-bottom: 7px;
+    padding-top: 5px;
+  }
+
   @media (hover: hover) {
     [type=checkbox] {
       visibility: hidden;
@@ -126,8 +135,8 @@ export default {
   [type=checkbox] {
     -webkit-appearance: none;
     border-radius: 50%;
-    width: 17px;
-    height: 17px;
+    width: 16px;
+    height: 16px;
     color: #6872b6;
     background-size: contain;
     outline: none;

@@ -87,11 +87,23 @@ export default {
 </script>
 
 <style>
-a:hover {
-  cursor: pointer;
-}
-td{
-  -moz-user-select: none;
-  user-select: none;
-}
+  a:hover {
+    cursor: pointer;
+  }
+  td{
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  .text-dark {
+    color: #2d2d2d !important;
+  }
+
+  .text-dark:hover {
+    text-decoration: underline;
+  }
+
+  .text-left {
+    color: #4b4b4b;
+  }
 </style>

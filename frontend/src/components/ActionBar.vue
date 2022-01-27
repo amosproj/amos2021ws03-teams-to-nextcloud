@@ -73,9 +73,15 @@ export default {
 </script>
 
 <style>
+  .navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
   .small {
     font-size: 1.7ex;
   }
+
   a:hover {
     cursor: pointer;
   }
@@ -85,7 +91,7 @@ export default {
     margin: 0 2px;
   }
 
-  .section { color: #2d2d2d; }
+  .section { color: #4b4b4b; font-size: 14px;}
   .section:hover { color: #5861a0; }
   .section svg { fill: #4b4b4b; }
   .section:hover svg { fill: #5861a0; }

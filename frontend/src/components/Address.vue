@@ -5,7 +5,10 @@
       src="https://docs.nextcloud.com/server/22/developer_manual/_images/arrow-right.png"
       class="fileSeparator"
     />
-    <a href="#" v-on:click="open" class="text-dark">
+    <a v-if="index === this.$store.getters.StatePath.length - 1" href="#" v-on:click="open" id="active">
+      {{ directory.name }}
+    </a>
+    <a v-if="index !== this.$store.getters.StatePath.length - 1" href="#" v-on:click="open" id="inactive">
       {{ directory.name }}
     </a>
   </div>
@@ -28,12 +31,31 @@ export default {
 </script>
 
 <style>
-.fileSeparator {
-  width: 16px;
-  height: 16px;
-  margin: 4px;
-}
-a:hover {
-  cursor: pointer;
-}
+  .fileSeparator {
+    width: 15px;
+    height: 15px;
+  }
+
+  a {
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+
+  a:hover {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #active {
+    color: #2d2d2d;
+    font-weight: bold;
+  }
+
+  #inactive {
+    color: #2d2d2d;
+  }
+
+  #inactive:hover {
+    color: #5861a0;
+  }
 </style>

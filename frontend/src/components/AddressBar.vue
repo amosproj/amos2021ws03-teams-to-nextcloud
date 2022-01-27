@@ -23,10 +23,10 @@ export default {
 </script>
 
 <style>
-.addressBar {
-  height: 40px;
-  padding: 9.5px 16px 0px 36px;
-  overflow: auto;
-  white-space: nowrap;
-}
+  .addressBar {
+    height: 50px;
+    padding: 15px 16px 0 36px;
+    overflow: auto;
+    white-space: nowrap;
+  }
 </style>
