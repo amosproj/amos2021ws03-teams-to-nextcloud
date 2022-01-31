@@ -4,6 +4,7 @@ import { useToast } from "vue-toastification";
 import { NavBarIcons } from "@/util/NavBarIcons";
 import JSZip from "jszip";
 import { saveAs } from 'file-saver';
+import { app } from '@/main'
 
 class Download extends Action {
 
@@ -21,8 +22,9 @@ class Download extends Action {
         return super.setEnabled(false);
     }
     async execute() {
-        // Get the toast interface
+        // Get the toast interface and progress bar
         let toast = useToast();
+        let emitter = app.config.globalProperties.emitter;
         // Get webdav client
         let client = store.getters.StateWebdavClient;
         if (client == null) {
@@ -42,6 +44,17 @@ class Download extends Action {
         let items = store.getters.StateSelectedChildren;
         let directory = items.filter(items => items.directory === true);
         let fileItems = items.filter(items => items.file === true);
+
+        // String builder for progress bar message
+        let msg = "Downloading ";
+        let overallitems = directory.length+fileItems.length;
+        directory.length == 1 ? (msg+= directory.length+" folder") : ("") ;
+        directory.length > 1 ? (msg+= directory.length+" folders") : ("") ;
+        directory.length > 0 && fileItems.length > 0 ? (msg+=" and ") : ("") ;
+        fileItems.length == 1 ? (msg+=fileItems.length+" file") : ("") ;
+        fileItems.length > 1 ? (msg+=fileItems.length+" files") : ("") ;
+        // Show progress bar while downloading files and creating zip
+        emitter.emit("SHOW_PROGRESS_BAR", msg);
 
         // Download all selected directories and zip them each
         for(let j = 0; j < directory.length; j++){
@@ -68,6 +81,9 @@ class Download extends Action {
                 .then(function (blob) {
                 saveAs(blob, directory[j].name+".zip");
                 });
+
+            // Progress bar for folders
+            emitter.emit("PROGRESS_BAR_WIDTH", (((j+1)/(overallitems))*100));
             }
 
         // Download all selected files
@@ -95,7 +111,11 @@ class Download extends Action {
                 toast.error("There was an error while trying to download: " + fileItems[i].name);
                 continue;
             }
+            // Progress bar for files
+            emitter.emit("PROGRESS_BAR_WIDTH", (((i+1+directory.length)/(overallitems))*100));
         }
+        // Hide the progress bar once download is completed
+        setTimeout(() => emitter.emit("HIDE_PROGRESS_BAR"), 1000);
     }
 }
 export default Download;
