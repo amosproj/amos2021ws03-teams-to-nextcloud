@@ -45,16 +45,17 @@ class Download extends Action {
         let directory = items.filter(items => items.directory === true);
         let fileItems = items.filter(items => items.file === true);
 
-        // String builder for progress bar message
-        let msg = "Downloading ";
+        // String builder (singular/plural) for progress bar message
+        let msg = "";
+        let msgStart = "Downloading ";
+        let bothTypes = directory.length > 0 && fileItems.length > 0 ? true : false ;
+        let folderCount = directory.length > 0 ? (directory.length == 1 ? (directory.length+" folder") : (directory.length+" folders")) : ("");
+        let msgMiddle = bothTypes ? (" and ") : ("") ;
+        let filesCount = fileItems.length > 0 ? (fileItems.length == 1 ? (fileItems.length+" file") : (fileItems.length+" files")) : ("");
         let overallitems = directory.length+fileItems.length;
-        directory.length == 1 ? (msg+= directory.length+" folder") : ("") ;
-        directory.length > 1 ? (msg+= directory.length+" folders") : ("") ;
-        directory.length > 0 && fileItems.length > 0 ? (msg+=" and ") : ("") ;
-        fileItems.length == 1 ? (msg+=fileItems.length+" file") : ("") ;
-        fileItems.length > 1 ? (msg+=fileItems.length+" files") : ("") ;
         // Show progress bar while downloading files and creating zip
-        emitter.emit("SHOW_PROGRESS_BAR", msg);
+        emitter.emit("SHOW_PROGRESS_BAR", msgStart+folderCount+msgMiddle+filesCount);
+        console.log( msgStart+folderCount+msgMiddle+filesCount);
 
         // Download all selected directories and zip them each
         for(let j = 0; j < directory.length; j++){
@@ -82,7 +83,9 @@ class Download extends Action {
                 saveAs(blob, directory[j].name+".zip");
                 });
 
-            // Progress bar for folders
+            // Progress bar for folders, check if files message is needed
+            msg = bothTypes ? msgStart+(j+1+"/")+folderCount+msgMiddle+0+"/"+filesCount : msgStart+(j+1+"/")+folderCount ;
+            emitter.emit("SHOW_PROGRESS_BAR", msg);
             emitter.emit("PROGRESS_BAR_WIDTH", (((j+1)/(overallitems))*100));
             }
 
@@ -111,7 +114,9 @@ class Download extends Action {
                 toast.error("There was an error while trying to download: " + fileItems[i].name);
                 continue;
             }
-            // Progress bar for files
+            // Progress bar for files and check if folder message is needed
+            msg = bothTypes ?  msgStart+(directory.length)+"/"+folderCount+msgMiddle+(i+1+"/")+filesCount : msgStart+(i+1+"/")+filesCount ;
+            emitter.emit("SHOW_PROGRESS_BAR", msg);
             emitter.emit("PROGRESS_BAR_WIDTH", (((i+1+directory.length)/(overallitems))*100));
         }
         // Hide the progress bar once download is completed
