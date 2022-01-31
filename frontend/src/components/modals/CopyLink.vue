@@ -103,6 +103,7 @@ import { parseXML } from 'webdav'
       close() {
         this.$store.commit("setIsCopyLinkModalVisible", false);
         this.$store.dispatch("setAllFilesUnselected");
+        window.removeEventListener('keydown', this.escapeHandler);
       },
     },
   };

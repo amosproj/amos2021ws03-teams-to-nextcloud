@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th scope="col" style="width: 16px; padding-left:0">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox" v-if="fileList.length !== 0">
               <input
                 :checked="allFilesSelected"
                 @change="updateSelectionAll"
@@ -12,6 +12,9 @@
                 class="form-check-input"
                 id="tableCheckbox"
               />
+            </div>
+            <div class="custom-control custom-checkbox" v-if="fileList.length === 0" style="padding-left: 33px; padding-right: 8px">
+              <input class="form-check-input" type="checkbox" disabled>
             </div>
           </th>
           <TableHeaderColumn :resizable="true" orderKey="icon">
@@ -27,6 +30,11 @@
           v-bind:key="file.path"
           v-bind:file="file"
         ></File>
+        <tr v-if="fileList.length === 0">
+          <td id="uploadRow" colspan="4" @click="triggerClickOnUpload">
+            <h5 style="font-weight: bold;">Click here to upload</h5>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -88,6 +96,9 @@ export default {
         });
       }
     },
+    triggerClickOnUpload() {
+      document.getElementById("Upload").click();
+    },
   }
 };
 </script>
@@ -96,6 +107,12 @@ export default {
   .table td {
     padding: 0.5rem;
     vertical-align: middle;
+  }
+
+  #uploadRow {
+    background-color: #f8f9fa;
+    width: 100vw;
+    height: 100vh;
   }
 
   .table > thead > tr > th {

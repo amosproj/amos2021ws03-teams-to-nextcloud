@@ -1,6 +1,6 @@
 <template>
   <li class="nav-item active action">
-    <a class="nav-link" href="#" @click="execute">
+    <a class="nav-link" href="#" @click="execute" v-bind:id="name">
       <div class="section">
         <svg viewBox="0 -1.5 32 32" width="22px" height="24px" display="inline">
           <path v-bind:d="img"/>
