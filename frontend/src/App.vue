@@ -3,6 +3,7 @@
     <ActionBar
       v-bind:actions="getEnabledActions"
       v-bind:rightSideActions="getEnabledRightSideActions"
+      v-if="getShowActionBar"
     />
     <CreateFolderModal v-bind:isCreateModalVisible="getIsCreateModalVisible" />
     <RenameModal v-bind:isRenameModalVisible="getIsRenameModalVisible" />
@@ -33,6 +34,9 @@ export default {
     ProgressBar
   },
   computed: {
+    getShowActionBar: function() {
+      return this.$store.getters.StateShowActionBar;
+    },
     getEnabledActions: function () {
       return this.$store.getters.StateEnabledActions;
     },

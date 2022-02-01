@@ -42,6 +42,10 @@ export default {
       saveEvent.notifySuccess();
     });
     ms.settings.setValidityState(true);
+    this.$store.commit("setShowActionBar", false);
+  },
+  onUnmounted() {
+    this.$store.commit("setShowActionBar", true);
   }
 }
 </script>

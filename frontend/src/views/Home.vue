@@ -27,6 +27,7 @@ export default {
   mounted() {
     this.$store.dispatch("initPath");
     this.$store.dispatch("loadChildrenForPath");
+    this.$store.commit("setShowActionBar", true);
   },
 };
 </script>

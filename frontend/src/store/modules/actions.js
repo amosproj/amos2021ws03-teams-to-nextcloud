@@ -13,6 +13,7 @@ const state = {
     isCreateModalVisible: false,
     isRenameModalVisible: false,
     isCopyLinkModalVisible: false,
+    showActionBar: true,
     actions: [
         new New(),
         new Upload(),
@@ -66,6 +67,9 @@ const getters = {
 
     StateIsCopyLinkModalVisible: function(state){
         return state.isCopyLinkModalVisible;
+    },
+    StateShowActionBar: function(state){
+      return state.showActionBar
     }
 };
 
@@ -83,6 +87,9 @@ const mutations = {
 
     setIsCopyLinkModalVisible(state, isCopyLinkModalVisible){
         state.isCopyLinkModalVisible = isCopyLinkModalVisible;
+    },
+    setShowActionBar(state, showActionBar){
+      state.showActionBar = showActionBar;
     }
 };
 
