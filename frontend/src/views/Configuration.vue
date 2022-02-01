@@ -1,12 +1,10 @@
 <template>
   <div class="container">
-    <h3>Configuration Page for {{teamName}} in channel: {{channelName}}</h3>
-    <form>
-      <div class="form-group text-left">
-        <label for="nextcloud-url">Nextcloud URL</label>
-        <input v-model="nextcloudUrl" type="text" class="form-control" id="nextcloud-url">
-        </div>
-    </form>
+    <h3 v-if="this.context">Configuration Page for {{teamName}} in channel: {{channelName}}</h3>
+    <h3 v-else>This would be a configuration page for a Teams plugin will only be shown correctly when viewed inside Teams</h3>
+    <p>
+        This page currently does nothing and is only a placeholder for future configuration.
+    </p>
   </div>
 </template>
 
@@ -17,7 +15,6 @@ export default {
   data() {
     return{
       context: null,
-      nextcloudUrl: ''
     }
   },
   computed:{
@@ -36,7 +33,6 @@ export default {
       this.context = context;
     });
     ms.settings.registerOnSaveHandler((saveEvent)=>{
-      console.log("nextcloud url set to ", this.nextcloudUrl)
       ms.settings.setSettings({
         websiteUrl: `${window.location.origin}`,
         contentUrl: `${window.location.origin}/#/lobby`,
