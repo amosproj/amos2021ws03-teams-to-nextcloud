@@ -21,7 +21,7 @@ const routes = [
     path: '/configuration',
     name: 'Configuration',
     component: Configuration,
-    meta: { guest: true }
+    meta: { guest: false }
   }
 
 
