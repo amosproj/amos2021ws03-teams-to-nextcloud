@@ -4,6 +4,8 @@ import { useToast } from "vue-toastification";
 import { NavBarIcons } from "@/util/NavBarIcons";
 import JSZip from "jszip";
 import { saveAs } from 'file-saver';
+import { app } from '@/main'
+import { msgTag } from "../util/MessageTag";
 
 class Download extends Action {
 
@@ -21,8 +23,9 @@ class Download extends Action {
         return super.setEnabled(false);
     }
     async execute() {
-        // Get the toast interface
+        // Get the toast interface and progress bar
         let toast = useToast();
+        let emitter = app.config.globalProperties.emitter;
         // Get webdav client
         let client = store.getters.StateWebdavClient;
         if (client == null) {
@@ -42,6 +45,11 @@ class Download extends Action {
         let items = store.getters.StateSelectedChildren;
         let directory = items.filter(items => items.directory === true);
         let fileItems = items.filter(items => items.file === true);
+
+        // String builder (singular/plural) for progress bar message
+        let overallitems = directory.length+fileItems.length;
+        // Show progress bar while downloading files and creating zip
+        emitter.emit("SHOW_PROGRESS_BAR", msgTag(0,directory.length,0,fileItems.length));
 
         // Download all selected directories and zip them each
         for(let j = 0; j < directory.length; j++){
@@ -68,7 +76,11 @@ class Download extends Action {
                 .then(function (blob) {
                 saveAs(blob, directory[j].name+".zip");
                 });
-            }
+
+            // Progress bar for folders, check if files message is needed
+            emitter.emit("SHOW_PROGRESS_BAR", msgTag(j+1,directory.length,0,fileItems.length));
+            emitter.emit("PROGRESS_BAR_WIDTH", (((j+1)/(overallitems))*100));
+        }
 
         // Download all selected files
         for (let i = 0; i < fileItems.length; i++) {
@@ -95,7 +107,12 @@ class Download extends Action {
                 toast.error("There was an error while trying to download: " + fileItems[i].name);
                 continue;
             }
+            // Progress bar for files and check if folder message is needed
+            emitter.emit("SHOW_PROGRESS_BAR", msgTag(directory.length,directory.length,i+1,fileItems.length));
+            emitter.emit("PROGRESS_BAR_WIDTH", (((i+1+directory.length)/(overallitems))*100));
         }
+        // Hide the progress bar once download is completed
+        setTimeout(() => emitter.emit("HIDE_PROGRESS_BAR"), 1000);
     }
 }
 export default Download;
