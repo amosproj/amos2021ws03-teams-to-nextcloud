@@ -9,7 +9,7 @@
       <span :class="getFileIconClasses()"></span>
     </td>
     <td class="text-left">
-      <a href="#" @click="open" class="text-dark">
+      <a href="#" @click.once="open" class="text-dark">
         {{ file.name }}
       </a>
     </td>
