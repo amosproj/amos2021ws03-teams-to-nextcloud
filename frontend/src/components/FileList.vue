@@ -111,8 +111,9 @@ export default {
 
   #uploadRow {
     background-color: #f8f9fa;
+    cursor: pointer;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 146px);
   }
 
   .table > thead > tr > th {
