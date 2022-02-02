@@ -5,6 +5,7 @@ import { NavBarIcons } from "@/util/NavBarIcons";
 import JSZip from "jszip";
 import { saveAs } from 'file-saver';
 import { app } from '@/main'
+import { msgTag } from "../util/MessageTag";
 
 class Download extends Action {
 
@@ -46,16 +47,9 @@ class Download extends Action {
         let fileItems = items.filter(items => items.file === true);
 
         // String builder (singular/plural) for progress bar message
-        let msg = "";
-        let msgStart = "Downloading ";
-        let bothTypes = directory.length > 0 && fileItems.length > 0 ? true : false ;
-        let folderCount = directory.length > 0 ? (directory.length == 1 ? (directory.length+" folder") : (directory.length+" folders")) : ("");
-        let msgMiddle = bothTypes ? (" and ") : ("") ;
-        let filesCount = fileItems.length > 0 ? (fileItems.length == 1 ? (fileItems.length+" file") : (fileItems.length+" files")) : ("");
         let overallitems = directory.length+fileItems.length;
         // Show progress bar while downloading files and creating zip
-        emitter.emit("SHOW_PROGRESS_BAR", msgStart+folderCount+msgMiddle+filesCount);
-        console.log( msgStart+folderCount+msgMiddle+filesCount);
+        emitter.emit("SHOW_PROGRESS_BAR", msgTag(0,directory.length,0,fileItems.length));
 
         // Download all selected directories and zip them each
         for(let j = 0; j < directory.length; j++){
@@ -84,10 +78,9 @@ class Download extends Action {
                 });
 
             // Progress bar for folders, check if files message is needed
-            msg = bothTypes ? msgStart+(j+1+"/")+folderCount+msgMiddle+0+"/"+filesCount : msgStart+(j+1+"/")+folderCount ;
-            emitter.emit("SHOW_PROGRESS_BAR", msg);
+            emitter.emit("SHOW_PROGRESS_BAR", msgTag(j+1,directory.length,0,fileItems.length));
             emitter.emit("PROGRESS_BAR_WIDTH", (((j+1)/(overallitems))*100));
-            }
+        }
 
         // Download all selected files
         for (let i = 0; i < fileItems.length; i++) {
@@ -115,8 +108,7 @@ class Download extends Action {
                 continue;
             }
             // Progress bar for files and check if folder message is needed
-            msg = bothTypes ?  msgStart+(directory.length)+"/"+folderCount+msgMiddle+(i+1+"/")+filesCount : msgStart+(i+1+"/")+filesCount ;
-            emitter.emit("SHOW_PROGRESS_BAR", msg);
+            emitter.emit("SHOW_PROGRESS_BAR", msgTag(directory.length,directory.length,i+1,fileItems.length));
             emitter.emit("PROGRESS_BAR_WIDTH", (((i+1+directory.length)/(overallitems))*100));
         }
         // Hide the progress bar once download is completed
