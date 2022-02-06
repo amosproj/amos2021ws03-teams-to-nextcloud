@@ -1,0 +1,14 @@
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - Documentation/Deployment.md
+  - Documentation/AddonToTeams.md
+  - Documentation/SSO-Config.md
+  - Documentation/EnablingCORSonNextcloud.md
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
