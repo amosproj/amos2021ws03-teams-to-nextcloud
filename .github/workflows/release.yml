@@ -25,7 +25,7 @@ jobs:
     - run: npm run build --if-present
     - name: Zip manifest.json
       run: |
-        zip --junk-paths nextcloud.zip ../public/manifest.json ../public/color.png ../public/outline.png
+        zip --junk-paths nextcloud.zip ../plugin-assets/manifest.json ../plugin-assets/color.png ../plugin-assets/outline.png
     - name: Zip Release Build
       run: |
         zip dist.zip ./dist/*/**
