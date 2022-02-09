@@ -2,9 +2,9 @@
 
 - [have a Microsoft Teams Tenant](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant)
 - create a .zip of the following three files inside the [plugin-assets](/plugin-assets/) folder
-  - [`manifest.json`](/public/manifest.json)
-  - [`color.png`](/public/color.png)
-  - [`outline.png`](/public/outline.png)
+  - [`manifest.json`](/plugin-assets/manifest.json)
+  - [`color.png`](/plugin-assets/color.png)
+  - [`outline.png`](/plugin-assets/outline.png)
 
 ## 1 Upload App to Teams
 
