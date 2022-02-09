@@ -1,7 +1,7 @@
 ## 0 Prerequisites
 
 - [have a Microsoft Teams Tenant](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant)
-- create a .zip of the following three files inside the [public](/public/) folder
+- create a .zip of the following three files inside the [plugin-assets](/plugin-assets/) folder
   - [`manifest.json`](/public/manifest.json)
   - [`color.png`](/public/color.png)
   - [`outline.png`](/public/outline.png)
